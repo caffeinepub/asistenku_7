@@ -1,0 +1,96 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-refactor-frontend-src-app-tsx-to-be-a-minimal-stable-react-router-entrypoint-wrap-the-app-with-exactly-one-browserrouter-and-render-exactly-one-routes-block-ensure-the-route-renders-the-existing-landingpage-component",
+      "featureTitle": "Refactor `frontend/src/App.tsx` to be a minimal, stable React Router entrypoint: wrap the app with **exactly one** `BrowserRouter` and render **exactly one** `Routes` block. Ensure the route `\"/\"` renders the existing `LandingPage` component.",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-22"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-notfound-fallback-route-in-frontend-src-app-tsx-that-renders-a-centered-calm-card-ui-with-the-exact-strings-title-404-text-halaman-tidak-ditemukan-and-a-button-labeled-kembali-that-navigates-to",
+      "featureTitle": "Add a `\"*\"` NotFound fallback route in `frontend/src/App.tsx` that renders a centered, calm card UI with the exact strings: title `\"404\"`, text `\"Halaman tidak ditemukan.\"`, and a button labeled `\"Kembali\"` that navigates to `\"/\"`.",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-23"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-avoid-any-duplicate-router-providers-duplicate-route-trees-duplicate-routes-blocks-or-leftover-development-only-code-in-frontend-src-app-tsx-that-could-cause-render-loops-repeated-mounts-or-preview-hangs-blank-screens",
+      "featureTitle": "Remove/avoid any duplicate router providers, duplicate route trees, duplicate `Routes` blocks, or leftover development-only code in `frontend/src/App.tsx` that could cause render loops, repeated mounts, or preview hangs/blank screens.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/internal/InternalRegister.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-24"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-verify-and-fix-if-needed-all-imports-used-by-frontend-src-app-tsx-so-they-use-correct-relative-paths-and-correct-file-name-casing-for-all-route-components-landingpage-client-partner-internal-pages",
+      "featureTitle": "Verify and fix (if needed) all imports used by `frontend/src/App.tsx` so they use correct relative paths and correct file name casing for all route components (LandingPage, client/partner/internal pages).",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-25"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-frontend-src-app-tsx-has-no-effects-or-runtime-side-effects-no-useeffect-no-intervals-timeouts-no-event-listeners-and-no-conditional-rendering-that-depends-on-async-state-for-initial-route-rendering",
+      "featureTitle": "Ensure `frontend/src/App.tsx` has no effects or runtime side-effects: no `useEffect`, no intervals/timeouts, no event listeners, and no conditional rendering that depends on async state for initial route rendering.",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-26"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

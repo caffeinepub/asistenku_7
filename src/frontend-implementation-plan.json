@@ -1,0 +1,114 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Stabilize App.tsx routing with single BrowserRouter, single Routes tree, and NotFound fallback",
+  "requirements": [
+    {
+      "id": "REQ-22",
+      "summary": "Refactor App.tsx into a minimal React Router entry that uses exactly one BrowserRouter and a single Routes block, with '/' rendering the existing LandingPage.",
+      "acceptanceCriteria": [
+        "`frontend/src/App.tsx` uses `BrowserRouter` (single instance) and a single `Routes` block.",
+        "Navigating to `/` renders the existing landing page (`LandingPage`) with no copy/layout changes.",
+        "No other file is required to add additional router wrappers (i.e., router is not wrapped elsewhere)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Replace the current TanStack Router setup with a minimal React Router entry: a single BrowserRouter wrapping a single Routes tree. Ensure the '/' route renders the existing LandingPage component without modifying LandingPage or its composed sections."
+        }
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "summary": "Add a '*' NotFound fallback route in App.tsx that shows a centered calm card with exact strings and a button navigating back to '/'.",
+      "acceptanceCriteria": [
+        "Navigating to an unknown route (e.g., `/does-not-exist`) renders the NotFound card instead of a blank screen.",
+        "The NotFound view is centered and visually calm (card with whitespace, rounded corners, subtle shadow).",
+        "The NotFound view displays exactly: `404`, `Halaman tidak ditemukan.`, and a `Kembali` button that routes to `/`."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a React Router '*' fallback route that renders a centered, calm card UI containing the exact title '404', text 'Halaman tidak ditemukan.', and a 'Kembali' button that navigates to '/'. Use the shadcn-ui Card/Button components for consistent styling (Verify the component's usage instructions before implementing.) and use React Router navigation primitives that avoid hooks inside App.tsx (e.g., Link)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Eliminate duplicate router providers/route trees/Routes blocks and any leftover dev-only routing code that could cause loops, repeated mounts, hangs, or blank screens.",
+      "acceptanceCriteria": [
+        "`frontend/src/App.tsx` contains no nested/recursive router providers (e.g., a provider that renders itself through a route component).",
+        "Preview loads reliably without intermittent blank white pages or hangs attributable to routing setup."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Remove the recursive router/provider pattern and any TanStack Router route-tree construction from App.tsx so there is no self-referential rendering, nested providers, or duplicate routing trees that can cause render loops or repeated mounts."
+        },
+        {
+          "path": "frontend/src/pages/client/LoginClient.tsx",
+          "operation": "modify",
+          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+        },
+        {
+          "path": "frontend/src/pages/client/RegisterClient.tsx",
+          "operation": "modify",
+          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+        },
+        {
+          "path": "frontend/src/pages/partner/LoginPartner.tsx",
+          "operation": "modify",
+          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+        },
+        {
+          "path": "frontend/src/pages/partner/RegisterPartner.tsx",
+          "operation": "modify",
+          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+        },
+        {
+          "path": "frontend/src/pages/internal/InternalLogin.tsx",
+          "operation": "modify",
+          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+        },
+        {
+          "path": "frontend/src/pages/internal/InternalRegister.tsx",
+          "operation": "modify",
+          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+        }
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "summary": "Verify and fix App.tsx imports and route-component casing/paths so builds succeed on case-sensitive file systems and all routes resolve correctly.",
+      "acceptanceCriteria": [
+        "Project builds without import-resolution errors on case-sensitive file systems.",
+        "All routes used in App.tsx resolve to the intended existing components."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Verify all route component imports (LandingPage, client/partner/internal pages) use correct relative paths and correct filename casing; ensure React Router imports come from react-router-dom and all referenced route components exist and resolve correctly."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Ensure App.tsx is side-effect free: no hooks, effects, timers, listeners, or async-dependent conditional initial rendering.",
+      "acceptanceCriteria": [
+        "`frontend/src/App.tsx` contains no hooks or side-effectful logic (no effects, timers, global listeners).",
+        "Initial render always mounts a route component deterministically, without waiting on async state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Keep App.tsx as a pure render-only routing entry: no useEffect/useState hooks, no intervals/timeouts, no event listeners, and no async-gated conditional rendering before routes mount."
+        }
+      ]
+    }
+  ]
+}

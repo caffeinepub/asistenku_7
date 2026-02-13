@@ -1,0 +1,58 @@
+export const layananData = [
+  {
+    id: 'tenang',
+    emoji: '🧘',
+    title: 'Tenang',
+    description: 'Untuk kebutuhan dasar yang tetap terkendali.',
+    price: 'Mulai dari Rp3.500.000 / bulan',
+    details: {
+      allocation: '2 personal sharing',
+      benefit1: 'Cocok untuk kebutuhan personal dan operasional ringan',
+      benefit2: 'Tetap fokus pada hidup tanpa terganggu detail kecil',
+    },
+    buttonLabel: 'Mulai ngobrol di WhatsApp',
+    whatsappUrl: 'https://wa.me/628817743613',
+  },
+  {
+    id: 'rapi',
+    emoji: '🗂️',
+    title: 'Rapi',
+    description: 'Struktur kerja lebih tertata dan stabil.',
+    price: 'Mulai dari Rp5.000.000 / bulan',
+    details: {
+      allocation: '2 personal sharing + 1 bisnis',
+      benefit1: 'Membantu koordinasi dan dokumentasi lebih terstruktur',
+      benefit2: 'Mendukung kebutuhan personal dan bisnis kecil',
+    },
+    buttonLabel: 'Mulai ngobrol di WhatsApp',
+    whatsappUrl: 'https://wa.me/628817743613',
+  },
+  {
+    id: 'fokus',
+    emoji: '🎯',
+    title: 'Fokus',
+    description: 'Eksekusi lebih dalam dengan prioritas jelas.',
+    price: 'Mulai dari Rp8.500.000 / bulan',
+    details: {
+      allocation: '2 personal sharing + 2 bisnis',
+      benefit1: 'Pendampingan lebih intensif untuk prioritas utama',
+      benefit2: 'Cocok untuk founder dan eksekutif yang sedang bertumbuh',
+    },
+    buttonLabel: 'Mulai ngobrol di WhatsApp',
+    whatsappUrl: 'https://wa.me/628817743613',
+  },
+  {
+    id: 'jaga',
+    emoji: '🛡️',
+    title: 'Jaga',
+    description: 'Kontrol menyeluruh untuk tanggung jawab besar.',
+    price: 'Mulai dari Rp12.000.000 / bulan',
+    details: {
+      allocation: '2 personal sharing + 3 bisnis',
+      benefit1: 'Pendampingan menyeluruh untuk kebutuhan skala lebih luas',
+      benefit2: 'Cocok untuk perusahaan dan eksekutif dengan tanggung jawab besar',
+    },
+    buttonLabel: 'Mulai ngobrol di WhatsApp',
+    whatsappUrl: 'https://wa.me/628817743613',
+  },
+];

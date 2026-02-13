@@ -1,0 +1,110 @@
+{
+  "kind": "build_request",
+  "title": "Stabilize frontend preview by simplifying App.tsx routing and adding a NotFound fallback",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-22",
+      "text": "Refactor `frontend/src/App.tsx` to be a minimal, stable React Router entrypoint: wrap the app with **exactly one** `BrowserRouter` and render **exactly one** `Routes` block. Ensure the route `\"/\"` renders the existing `LandingPage` component.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-4"
+        ],
+        "quotes": [
+          "Do:\n1) Open frontend/src/App.tsx and make it minimal:\n   - Wrap with BrowserRouter once\n   - Use a single Routes block\n   - Ensure \"/\" renders the existing LandingPage"
+        ]
+      },
+      "acceptanceCriteria": [
+        "`frontend/src/App.tsx` uses `BrowserRouter` (single instance) and a single `Routes` block.",
+        "Navigating to `/` renders the existing landing page (`LandingPage`) with no copy/layout changes.",
+        "No other file is required to add additional router wrappers (i.e., router is not wrapped elsewhere)."
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "text": "Add a `\"*\"` NotFound fallback route in `frontend/src/App.tsx` that renders a centered, calm card UI with the exact strings: title `\"404\"`, text `\"Halaman tidak ditemukan.\"`, and a button labeled `\"Kembali\"` that navigates to `\"/\"`.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-4"
+        ],
+        "quotes": [
+          "2) Add a simple NotFound fallback route \"*\" that renders a centered calm card with:\n   Title: \"404\"\n   Text: \"Halaman tidak ditemukan.\"\n   Button: \"Kembali\" -> \"/\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Navigating to an unknown route (e.g., `/does-not-exist`) renders the NotFound card instead of a blank screen.",
+        "The NotFound view is centered and visually calm (card with whitespace, rounded corners, subtle shadow).",
+        "The NotFound view displays exactly: `404`, `Halaman tidak ditemukan.`, and a `Kembali` button that routes to `/`."
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "text": "Remove/avoid any duplicate router providers, duplicate route trees, duplicate `Routes` blocks, or leftover development-only code in `frontend/src/App.tsx` that could cause render loops, repeated mounts, or preview hangs/blank screens.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-4"
+        ],
+        "quotes": [
+          "3) Remove any duplicate router wrappers, duplicate Routes, or leftover dev-only code that can cause render loops."
+        ]
+      },
+      "acceptanceCriteria": [
+        "`frontend/src/App.tsx` contains no nested/recursive router providers (e.g., a provider that renders itself through a route component).",
+        "Preview loads reliably without intermittent blank white pages or hangs attributable to routing setup."
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "text": "Verify and fix (if needed) all imports used by `frontend/src/App.tsx` so they use correct relative paths and correct file name casing for all route components (LandingPage, client/partner/internal pages).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-4"
+        ],
+        "quotes": [
+          "4) Verify all imports in App.tsx use correct paths and correct casing."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Project builds without import-resolution errors on case-sensitive file systems.",
+        "All routes used in App.tsx resolve to the intended existing components."
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "text": "Ensure `frontend/src/App.tsx` has no effects or runtime side-effects: no `useEffect`, no intervals/timeouts, no event listeners, and no conditional rendering that depends on async state for initial route rendering.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-4"
+        ],
+        "quotes": [
+          "5) Ensure App.tsx has no effects, intervals, listeners, or conditional rendering."
+        ]
+      },
+      "acceptanceCriteria": [
+        "`frontend/src/App.tsx` contains no hooks or side-effectful logic (no effects, timers, global listeners).",
+        "Initial render always mounts a route component deterministically, without waiting on async state."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not touch the backend (no changes under `backend/`).",
+    "Do not change landing page copy or layout (no changes to LandingPage or its composed sections).",
+    "Do not add new features beyond routing stabilization and the NotFound fallback.",
+    "Only stabilize the frontend entry and routing so preview never hangs/blank.",
+    "Do not edit files listed as immutable by the system (e.g., `frontend/src/main.tsx`, `frontend/src/hooks/useInternetIdentity.ts(x)`, `frontend/src/hooks/useActor.ts`, and anything under `frontend/src/components/ui`)."
+  ],
+  "nonGoals": [
+    "Connecting Internet Identity login or adding real authentication.",
+    "Adding new pages/routes beyond the explicitly requested NotFound fallback and preserving existing routes.",
+    "Changing any UI/copy within existing landing and auth simulation pages (client/partner/internal), except as required to keep routing functional."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

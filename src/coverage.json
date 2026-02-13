@@ -1,0 +1,89 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-13T23:03:43.147Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 5,
+    "implemented": 5,
+    "items": [
+      {
+        "id": "REQ-22",
+        "summary": "Refactor `frontend/src/App.tsx` to be a minimal, stable React Router entrypoint: wrap the app with **exactly one** `BrowserRouter` and render **exactly one** `Routes` block. Ensure the route `\"/\"` renders the existing `LandingPage` component.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-23",
+        "summary": "Add a `\"*\"` NotFound fallback route in `frontend/src/App.tsx` that renders a centered, calm card UI with the exact strings: title `\"404\"`, text `\"Halaman tidak ditemukan.\"`, and a button labeled `\"Kembali\"` that navigates to `\"/\"`.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-24",
+        "summary": "Remove/avoid any duplicate router providers, duplicate route trees, duplicate `Routes` blocks, or leftover development-only code in `frontend/src/App.tsx` that could cause render loops, repeated mounts, or preview hangs/blank screens.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/pages/client/LoginClient.tsx",
+          "frontend/src/pages/client/RegisterClient.tsx",
+          "frontend/src/pages/partner/LoginPartner.tsx",
+          "frontend/src/pages/partner/RegisterPartner.tsx",
+          "frontend/src/pages/internal/InternalLogin.tsx",
+          "frontend/src/pages/internal/InternalRegister.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/pages/internal/InternalRegister.tsx"
+        ]
+      },
+      {
+        "id": "REQ-25",
+        "summary": "Verify and fix (if needed) all imports used by `frontend/src/App.tsx` so they use correct relative paths and correct file name casing for all route components (LandingPage, client/partner/internal pages).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-26",
+        "summary": "Ensure `frontend/src/App.tsx` has no effects or runtime side-effects: no `useEffect`, no intervals/timeouts, no event listeners, and no conditional rendering that depends on async state for initial route rendering.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/pages/internal/InternalRegister.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

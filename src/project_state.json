@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 9,
+  "summary": "Extend the Asistenku project by adding 6 new static login & register pages (client/partner + internal) with routing, while preserving the existing landing page design/copy; for internal pages, do not modify landing components and do not change any existing files except router registration; no backend/auth integration (UI-only).",
+  "architectural_notes": [
+    "Strict content lock: do not change any provided text, prices, capitalization, or order; do not add/remove copy except where explicitly instructed.",
+    "Use provided assets (heroimage.png, asistenku-horizontal.png, asistenku-icon.png) and WhatsApp link https://wa.me/628817743613.",
+    "Layanan section: 4 cards in a responsive grid; details hidden by default (accordion), expand on click with smooth animation; prices shown only in expanded detail.",
+    "Design rules: clean white background, lots of whitespace, large rounded corners, subtle shadows; premium/tenang feel; not SaaS-like.",
+    "New static pages + routing allowed: add 4 standalone page components under frontend/src/pages/{client,partner}/ and register routes without restructuring the app; landing route unchanged.",
+    "Strict constraints for this enhancement: no backend edits (no main.mo), no API calls, no Internet Identity/auth SDK—buttons are UI-only.",
+    "Allowed landing edits only: frontend/src/components/asistenku/Header.tsx and frontend/src/components/asistenku/JoinTeamSection.tsx; do not change any existing landing copy/text or redesign/regenerate landing sections.",
+    "Internal pages enhancement constraint: do not modify backend; do not add API calls; do not use Internet Identity/auth SDK—UI-only.",
+    "Internal pages constraint: do not modify landing components; do not change any existing files except router registration (in addition to adding new page files).",
+    "Add two new static internal pages at frontend/src/pages/internal/{InternalLogin.tsx,InternalRegister.tsx} and routes /internal/login and /internal/register."
+  ],
+  "known_issues": [
+    "Build/generation hit an internal configuration error (Caffeine) during initial attempt; user requested to try again.",
+    "Preview sometimes hangs or shows a blank white page due to unstable/duplicated frontend routing setup in App.tsx; needs stabilization."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-create-a-single-static-landing-page-for-asistenku-with-no-login-no-register-no-additional-pages-no-routing-and-no-auto-redirect-the-page-must-only-include-the-sections-and-elements-explicitly-specified-header-hero-section-layanan-section-ingin-jadi-bagian-dari-tim-asistenku-penutup-footer-and-must-not-include-any-other-links-or-extra-ui-elements",
+      "title": "Create a single static landing page for “Asistenku” with no login, no register, no additional pages, no routing, and no auto-redirect. The page must only include the sections and elements explicitly specified (Header, Hero, Section Layanan, Section “INGIN JADI BAGIAN DARI TIM ASISTENKU”, Penutup, Footer) and must not include any other links or extra UI elements.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-use-the-uploaded-static-assets-exactly-as-provided-heroimage-png-asistenku-horizontal-png-asistenku-icon-png-place-them-as-frontend-static-assets-and-render-them-in-the-specified-locations-and-sizes",
+      "title": "Use the uploaded static assets exactly as provided: heroimage.png, asistenku-horizontal.png, asistenku-icon.png. Place them as frontend static assets and render them in the specified locations and sizes.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-static-header-exactly-as-specified-white-background-subtle-shadow-generous-spacing-no-sharp-borders-desktop-layout-with-left-logo-asistenku-horizontal-png-height-32-and-empty-right-side-mobile-layout-with-left-logo-asistenku-icon-png-height-28",
+      "title": "Implement the static Header exactly as specified: white background, subtle shadow, generous spacing, no sharp borders; desktop layout with left logo (asistenku-horizontal.png height 32) and empty right side; mobile layout with left logo (asistenku-icon.png height 28).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-hero-section-exactly-as-specified-centered-heroimage-png-with-max-width-780px-on-desktop-and-92-on-mobile-rounded-corners-24px-soft-shadow-not-full-width-not-too-tall-no-overlay-text-on-the-image-and-top-bottom-margins-at-least-48px-below-the-image-render-the-two-lines-of-text-exactly-no-changes-and-render-a-primary-button-pilih-layanan-that-scrolls-to-the-layanan-section-also-render-a-small-link-ngobrol-dulu-that-navigates-to-https-wa-me-628817743613",
+      "title": "Implement the Hero section exactly as specified: centered heroimage.png with max width 780px on desktop and 92% on mobile, rounded corners 24px, soft shadow, not full width, not too tall, no overlay text on the image, and top/bottom margins at least 48px. Below the image, render the two lines of text exactly (no changes) and render a primary button “Pilih Layanan” that scrolls to the layanan section. Also render a small link “Ngobrol dulu” that navigates to https://wa.me/628817743613.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-section-layanan-as-a-4-card-grid-2-columns-desktop-1-column-mobile-each-card-must-be-collapsed-by-default-and-behave-like-an-accordion-clicking-a-card-expands-collapses-it-with-a-smooth-animation-the-collapsed-state-must-show-only-the-emoji-title-line-and-the-one-line-description-exactly-as-provided-prices-must-be-hidden-in-collapsed-state-and-only-appear-in-the-expanded-details-expanded-details-must-include-the-exact-lines-including-price-and-include-a-button-that-links-to-https-wa-me-628817743613-with-the-exact-label-mulai-ngobrol-di-whatsapp-use-generous-whitespace-large-rounding-and-subtle-shadows",
+      "title": "Implement SECTION LAYANAN as a 4-card grid (2 columns desktop, 1 column mobile). Each card must be collapsed by default and behave like an accordion: clicking a card expands/collapses it with a smooth animation. The collapsed state must show only the emoji/title line and the one-line description exactly as provided; prices must be hidden in collapsed state and only appear in the expanded details. Expanded details must include the exact lines (including price) and include a button that links to https://wa.me/628817743613 with the exact label “Mulai ngobrol di WhatsApp”. Use generous whitespace, large rounding, and subtle shadows.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-section-ingin-jadi-bagian-dari-tim-asistenku-with-the-exact-heading-text-ingin-jadi-bagian-dari-tim-asistenku-and-exactly-one-button-labeled-pelajari-the-button-must-not-navigate-anywhere-placeholder-only-and-must-not-link-to-any-page",
+      "title": "Implement SECTION “INGIN JADI BAGIAN DARI TIM ASISTENKU” with the exact heading text “Ingin jadi bagian dari Tim Asistenku?” and exactly one button labeled “Pelajari”. The button must not navigate anywhere (placeholder only) and must not link to any page.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-penutup-and-footer-exactly-as-specified-penutup-must-display-exactly-kami-menjaga-setiap-layanan-agar-tetap-berjalan-dengan-kualitas-terbaik-footer-must-display-asistenku-icon-png-at-height-24-and-the-exact-text-asistenku-2026-pt-asistenku-digital-indonesia-footer-must-not-include-any-other-links-any-other-text-including-caffeine-or-any-additional-elements",
+      "title": "Implement Penutup and Footer exactly as specified. Penutup must display exactly: “Kami menjaga setiap layanan agar tetap berjalan dengan kualitas terbaik.” Footer must display asistenku-icon.png at height 24 and the exact text “Asistenku © 2026 PT Asistenku Digital Indonesia”. Footer must not include any other links, any other text (including “caffeine”), or any additional elements.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-visual-theme-consistent-with-the-provided-design-rules-clean-white-background-premium-and-calm-feel-lots-of-whitespace-large-rounded-corners-subtle-shadows-and-avoid-making-it-look-like-a-typical-saas-landing-page-maintain-consistent-typography-spacing-scale-and-component-styling-across-all-sections-do-not-use-a-blue-purple-theme",
+      "title": "Apply a cohesive visual theme consistent with the provided design rules: clean white background, premium and calm feel, lots of whitespace, large rounded corners, subtle shadows, and avoid making it look like a typical SaaS landing page. Maintain consistent typography, spacing scale, and component styling across all sections. Do not use a blue+purple theme.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-strict-copy-integrity-across-the-entire-page-do-not-change-any-provided-text-prices-capitalization-or-ordering-do-not-add-any-additional-copy-and-do-not-remove-any-sentences-unless-explicitly-requested-none-are",
+      "title": "Enforce strict copy integrity across the entire page: do not change any provided text, prices, capitalization, or ordering; do not add any additional copy; and do not remove any sentences unless explicitly requested (none are).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-four-new-static-page-components-at-the-exact-paths-below-with-ui-only-behavior-no-backend-calls-no-auth-sdk-integration-and-a-calm-premium-style-white-background-centered-card-large-rounded-corners-soft-shadow-teal-accent-for-primary-buttons-each-page-card-must-render-the-existing-icon-at-the-top-using-img-src-assets-asistenku-icon-png-height-28-pages-to-create-1-frontend-src-pages-client-loginclient-tsx-route-client-login-2-frontend-src-pages-client-registerclient-tsx-route-client-register-3-frontend-src-pages-partner-loginpartner-tsx-route-partner-login-4-frontend-src-pages-partner-registerpartner-tsx-route-partner-register-all-content-copy-inside-these-new-pages-must-match-the-user-provided-strings-exactly-including-capitalization-and-punctuation-no-auto-redirects",
+      "title": "Create four new static page components at the exact paths below, with UI-only behavior (no backend calls, no auth SDK integration) and a calm, premium style: white background, centered card, large rounded corners, soft shadow, teal accent for primary buttons. Each page card must render the existing icon at the top using: <img src=\"/assets/asistenku-icon.png\" height=\"28\" />.\n\nPages to create:\n1) frontend/src/pages/client/LoginClient.tsx  (route: /client/login)\n2) frontend/src/pages/client/RegisterClient.tsx (route: /client/register)\n3) frontend/src/pages/partner/LoginPartner.tsx (route: /partner/login)\n4) frontend/src/pages/partner/RegisterPartner.tsx (route: /partner/register)\n\nAll content/copy inside these new pages must match the user-provided strings exactly (including capitalization and punctuation). No auto-redirects.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-exact-ui-and-static-interactions-for-client-login-frontend-src-pages-client-loginclient-tsx-title-masuk-subtext-untuk-client-asistenku-button-1-login-internet-identity-ui-only-helper-text-under-button-1-simulasi-ui-belum-terhubung-button-2-ruang-kerja-ui-only-divider-text-belum-punya-akun-button-daftar-navigates-to-client-register",
+      "title": "Implement the exact UI and static interactions for /client/login (frontend/src/pages/client/LoginClient.tsx):\n- Title: \"Masuk\"\n- Subtext: \"Untuk Client Asistenku\"\n- Button 1: \"Login Internet Identity\" (UI only)\n- Helper text under Button 1: \"Simulasi UI (belum terhubung).\"\n- Button 2: \"Ruang kerja\" (UI only)\n- Divider text: \"Belum punya akun?\"\n- Button: \"Daftar\" navigates to /client/register",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-exact-ui-and-static-success-state-behavior-for-client-register-frontend-src-pages-client-registerclient-tsx-title-daftar-subtext-untuk-client-asistenku-static-inputs-nama-email-whatsapp-button-kirim-after-clicking-kirim-show-a-success-state-on-the-same-page-no-navigation-text-pengajuan-diterima-tim-akan-menghubungi-kamu-button-kembali-ke-masuk-navigates-to-client-login",
+      "title": "Implement the exact UI and static success-state behavior for /client/register (frontend/src/pages/client/RegisterClient.tsx):\n- Title: \"Daftar\"\n- Subtext: \"Untuk Client Asistenku\"\n- Static inputs: \"Nama\", \"Email\", \"WhatsApp\"\n- Button: \"Kirim\"\n- After clicking \"Kirim\", show a success state on the same page (no navigation):\n  - Text: \"Pengajuan diterima. Tim akan menghubungi kamu.\"\n  - Button: \"Kembali ke Masuk\" navigates to /client/login",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-exact-ui-and-static-success-state-behavior-for-partner-register-frontend-src-pages-partner-registerpartner-tsx-title-daftar-subtext-untuk-partner-asistenku-static-inputs-nama-email-whatsapp-button-kirim-after-clicking-kirim-show-a-success-state-text-terkirim-menunggu-persetujuan-button-ke-halaman-masuk-navigates-to-partner-login",
+      "title": "Implement the exact UI and static success-state behavior for /partner/register (frontend/src/pages/partner/RegisterPartner.tsx):\n- Title: \"Daftar\"\n- Subtext: \"Untuk Partner Asistenku\"\n- Static inputs: \"Nama\", \"Email\", \"WhatsApp\"\n- Button: \"Kirim\"\n- After clicking \"Kirim\", show a success state:\n  - Text: \"Terkirim. Menunggu persetujuan.\"\n  - Button: \"Ke halaman Masuk\" navigates to /partner/login",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-exact-ui-for-partner-login-frontend-src-pages-partner-loginpartner-tsx-title-masuk-subtext-untuk-partner-asistenku-top-button-login-internet-identity-ui-only-helper-text-simulasi-ui-belum-terhubung-below-render-one-card-card-title-ruang-kerja-card-subtitle-masuk-ke-ruang-kerja-partner-button-masuk-ke-ruang-kerja-ui-only-bottom-text-button-belum-punya-akun-daftar-navigates-to-partner-register",
+      "title": "Implement the exact UI for /partner/login (frontend/src/pages/partner/LoginPartner.tsx):\n- Title: \"Masuk\"\n- Subtext: \"Untuk Partner Asistenku\"\n- Top button: \"Login Internet Identity\" (UI only)\n- Helper text: \"Simulasi UI (belum terhubung).\"\n- Below, render one card:\n  - Card title: \"Ruang kerja\"\n  - Card subtitle: \"Masuk ke ruang kerja Partner\"\n  - Button: \"Masuk ke ruang kerja\" (UI only)\n- Bottom text/button: \"Belum punya akun? Daftar\" navigates to /partner/register",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-register-the-four-new-routes-in-the-app-s-existing-frontend-router-entry-without-restructuring-the-application-keeping-the-landing-route-unchanged-current-app-state-frontend-src-app-tsx-renders-the-landing-page-directly-update-the-route-registration-so-these-paths-render-the-new-pages-client-login-loginclient-client-register-registerclient-partner-login-loginpartner-partner-register-registerpartner-the-landing-page-must-remain-available-at-its-current-route-unchanged-behavior-for-landing",
+      "title": "Register the four new routes in the app’s existing frontend router entry without restructuring the application, keeping the landing route unchanged.\n\nCurrent app state: frontend/src/App.tsx renders the landing page directly. Update the route registration so these paths render the new pages:\n- /client/login -> LoginClient\n- /client/register -> RegisterClient\n- /partner/login -> LoginPartner\n- /partner/register -> RegisterPartner\n\nThe landing page must remain available at its current route (unchanged behavior for landing).",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-landing-header-to-add-navigation-controls-while-preserving-the-existing-calm-styling-and-not-changing-existing-landing-copy-edit-only-frontend-src-components-asistenku-header-tsx-add-a-text-button-labeled-masuk-that-navigates-to-client-login-keep-the-existing-mulai-action-that-scrolls-to-the-layanan-section-existing-behavior-must-remain-add-a-text-button-labeled-partner-that-navigates-to-partner-register-preserve-the-existing-header-design-rules-white-background-subtle-shadow-generous-spacing-no-hard-borders",
+      "title": "Update the landing header to add navigation controls while preserving the existing calm styling and not changing existing landing copy.\n\nEdit only: frontend/src/components/asistenku/Header.tsx\n- Add a text button labeled \"Masuk\" that navigates to /client/login\n- Keep the existing \"Mulai\" action that scrolls to the layanan section (existing behavior must remain)\n- Add a text button labeled \"Partner\" that navigates to /partner/register\n- Preserve the existing header design rules: white background, subtle shadow, generous spacing, no hard borders.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-partner-cta-in-the-landing-join-team-section-so-it-navigates-to-partner-register-without-changing-any-existing-text-content-in-that-section-edit-only-frontend-src-components-asistenku-jointeamsection-tsx-keep-the-existing-heading-text-and-button-label-exactly-as-is-change-only-the-button-link-destination-so-the-action-navigates-to-partner-register",
+      "title": "Update the partner CTA in the landing join-team section so it navigates to /partner/register, without changing any existing text content in that section.\n\nEdit only: frontend/src/components/asistenku/JoinTeamSection.tsx\n- Keep the existing heading text and button label exactly as-is\n- Change only the button/link destination so the action navigates to /partner/register",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-two-new-static-internal-role-pages-under-frontend-src-pages-internal-with-ui-only-behavior-no-backend-calls-no-api-calls-no-internet-identity-sdk-usage-using-a-calm-premium-style-white-background-centered-layout-large-rounded-cards-soft-shadow-no-aggressive-colors-and-teal-accent-for-primary-buttons",
+      "title": "Create two new static internal-role pages under `frontend/src/pages/internal/` with UI-only behavior (no backend calls, no API calls, no Internet Identity SDK usage), using a calm premium style: white background, centered layout, large rounded cards, soft shadow, no aggressive colors, and teal accent for primary buttons.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-internal-login-page-ui-in-frontend-src-pages-internal-internallogin-tsx-with-the-specified-layout-and-copy-top-icon-image-use-the-existing-asistenku-icon-asset-title-masuk-internal-subtext-untuk-tim-asistenku-a-primary-button-labeled-login-internet-identity-that-does-nothing-helper-text-simulasi-ui-belum-terhubung-and-a-responsive-roles-grid-2-columns-desktop-1-column-mobile-of-role-cards",
+      "title": "Implement `/internal/login` page UI in `frontend/src/pages/internal/InternalLogin.tsx` with the specified layout and copy: top icon image (use the existing asistenku icon asset), title \"Masuk Internal\", subtext \"Untuk Tim Asistenku\", a primary button labeled \"Login Internet Identity\" that does nothing, helper text \"Simulasi UI (belum terhubung).\", and a responsive roles grid (2 columns desktop, 1 column mobile) of role cards.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-internal-register-page-ui-in-frontend-src-pages-internal-internalregister-tsx-with-the-specified-layout-and-copy-top-icon-image-use-the-existing-asistenku-icon-asset-title-daftar-internal-subtext-untuk-tim-asistenku-a-static-form-with-inputs-nama-email-whatsapp-and-a-role-dropdown-with-the-specified-role-options-plus-a-kirim-submit-button",
+      "title": "Implement `/internal/register` page UI in `frontend/src/pages/internal/InternalRegister.tsx` with the specified layout and copy: top icon image (use the existing asistenku icon asset), title \"Daftar Internal\", subtext \"Untuk Tim Asistenku\", a static form with inputs \"Nama\", \"Email\", \"WhatsApp\", and a Role dropdown with the specified role options, plus a \"Kirim\" submit button.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-register-the-two-new-routes-in-the-existing-tanstack-router-setup-by-editing-only-the-router-registration-file-frontend-src-app-tsx-add-internal-login-internallogin-and-internal-register-internalregister-without-changing-any-landing-components",
+      "title": "Register the two new routes in the existing TanStack Router setup by editing only the router registration file (`frontend/src/App.tsx`): add `/internal/login -> InternalLogin` and `/internal/register -> InternalRegister`, without changing any landing components.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refactor-frontend-src-app-tsx-to-be-a-minimal-stable-react-router-entrypoint-wrap-the-app-with-exactly-one-browserrouter-and-render-exactly-one-routes-block-ensure-the-route-renders-the-existing-landingpage-component",
+      "title": "Refactor `frontend/src/App.tsx` to be a minimal, stable React Router entrypoint: wrap the app with **exactly one** `BrowserRouter` and render **exactly one** `Routes` block. Ensure the route `\"/\"` renders the existing `LandingPage` component.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-notfound-fallback-route-in-frontend-src-app-tsx-that-renders-a-centered-calm-card-ui-with-the-exact-strings-title-404-text-halaman-tidak-ditemukan-and-a-button-labeled-kembali-that-navigates-to",
+      "title": "Add a `\"*\"` NotFound fallback route in `frontend/src/App.tsx` that renders a centered, calm card UI with the exact strings: title `\"404\"`, text `\"Halaman tidak ditemukan.\"`, and a button labeled `\"Kembali\"` that navigates to `\"/\"`.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-avoid-any-duplicate-router-providers-duplicate-route-trees-duplicate-routes-blocks-or-leftover-development-only-code-in-frontend-src-app-tsx-that-could-cause-render-loops-repeated-mounts-or-preview-hangs-blank-screens",
+      "title": "Remove/avoid any duplicate router providers, duplicate route trees, duplicate `Routes` blocks, or leftover development-only code in `frontend/src/App.tsx` that could cause render loops, repeated mounts, or preview hangs/blank screens.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-and-fix-if-needed-all-imports-used-by-frontend-src-app-tsx-so-they-use-correct-relative-paths-and-correct-file-name-casing-for-all-route-components-landingpage-client-partner-internal-pages",
+      "title": "Verify and fix (if needed) all imports used by `frontend/src/App.tsx` so they use correct relative paths and correct file name casing for all route components (LandingPage, client/partner/internal pages).",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-frontend-src-app-tsx-has-no-effects-or-runtime-side-effects-no-useeffect-no-intervals-timeouts-no-event-listeners-and-no-conditional-rendering-that-depends-on-async-state-for-initial-route-rendering",
+      "title": "Ensure `frontend/src/App.tsx` has no effects or runtime side-effects: no `useEffect`, no intervals/timeouts, no event listeners, and no conditional rendering that depends on async state for initial route rendering.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a static Asistenku landing page per provided layout/content rules (header, hero, layanan accordion cards, CTA section, closing text, footer) using specified assets and WhatsApp link.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add 4 static pages (/client/login, /client/register, /partner/login, /partner/register) with calm card UI and teal accents; register routes without restructuring; update Header to add navigation buttons (Masuk -> /client/login, Partner -> /partner/register) while keeping Mulai scroll; update JoinTeamSection partner CTA to navigate to /partner/register; no backend/API/Internet Identity integration and no landing redesign/copy changes.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add 2 static internal pages under frontend/src/pages/internal/ (InternalLogin, InternalRegister) with calm premium centered card UI and teal button accents; add routes /internal/login and /internal/register via router registration only; no backend/API/Internet Identity SDK integration; InternalLogin includes Internet Identity UI-only button + helper text and a responsive roles grid (8 roles) with per-card 'Masuk ke ruang kerja' button (no-op) and a 'Daftar Internal' link to /internal/register; InternalRegister includes static form inputs (Nama/Email/WhatsApp), role dropdown (7 roles), 'Kirim' button that shows same-page success state ('Terkirim. Menunggu persetujuan.') with 'Kembali ke Masuk' -> /internal/login; no validation, no persistence, no redirects, no role checking.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Asistenku",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

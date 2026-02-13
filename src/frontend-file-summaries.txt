@@ -1,0 +1,20 @@
+{
+  "frontend/src/App.tsx": "Minimal TanStack Router entry with single RouterProvider, root route using Outlet for children, all page routes (landing, client, partner, internal), and a NotFound fallback component for unmatched paths.",
+  "frontend/src/main.tsx": "Application entry point that mounts the app with React Query provider only (no Internet Identity provider).",
+  "frontend/src/components/asistenku/LandingPage.tsx": "Main landing page component that composes all sections (Header, Hero, Layanan, JoinTeam, Penutup, Footer) in the specified order.",
+  "frontend/src/components/asistenku/Header.tsx": "Static header component with responsive logo display, white background with subtle shadow, and three navigation buttons (Masuk, Mulai, Partner) that navigate or scroll as specified.",
+  "frontend/src/components/asistenku/Hero.tsx": "Hero section with centered image, exact copy text, scroll-to-layanan button, and WhatsApp link.",
+  "frontend/src/components/asistenku/LayananSection.tsx": "Layanan section with 4 accordion cards in responsive grid, prices hidden in collapsed state, smooth expand/collapse animations.",
+  "frontend/src/components/asistenku/layananCopy.ts": "Single source of truth for all layanan card content including exact titles, descriptions, prices, and WhatsApp URL.",
+  "frontend/src/components/asistenku/JoinTeamSection.tsx": "Section with exact heading and \"Pelajari\" button that navigates to /partner/register via client-side routing.",
+  "frontend/src/components/asistenku/Penutup.tsx": "Closing section with exact specified text about service quality.",
+  "frontend/src/components/asistenku/Footer.tsx": "Footer with icon logo and exact copyright text, no additional links or elements.",
+  "frontend/src/index.css": "Global styles with OKLCH color system, increased border radius for premium feel, and custom shadow utilities.",
+  "frontend/tailwind.config.js": "Tailwind configuration with increased default radius (1.5rem) and enhanced shadow scale for calm/premium aesthetic.",
+  "frontend/src/pages/client/LoginClient.tsx": "Static client login page with centered premium card, icon header, two UI-only buttons (Internet Identity and Ruang kerja), and navigation to client registration using TanStack Router.",
+  "frontend/src/pages/client/RegisterClient.tsx": "Static client registration page with form inputs (Nama, Email, WhatsApp) and in-place success state that navigates back to client login using TanStack Router.",
+  "frontend/src/pages/partner/LoginPartner.tsx": "Static partner login page with centered premium card, icon header, Internet Identity button, workspace card, and navigation to partner registration using TanStack Router.",
+  "frontend/src/pages/partner/RegisterPartner.tsx": "Static partner registration page with form inputs (Nama, Email, WhatsApp) and in-place success state that navigates to partner login using TanStack Router.",
+  "frontend/src/pages/internal/InternalLogin.tsx": "Static internal login page with centered card layout, icon header, no-op Internet Identity button, responsive grid of 8 role cards with workspace buttons, and navigation to internal registration using TanStack Router.",
+  "frontend/src/pages/internal/InternalRegister.tsx": "Static internal registration page with form inputs (Nama, Email, WhatsApp, Role dropdown) and in-place success state that navigates back to internal login using TanStack Router."
+}
