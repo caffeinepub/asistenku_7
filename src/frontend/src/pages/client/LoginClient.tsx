@@ -32,7 +32,7 @@ export default function LoginClient() {
             <Button
               variant="outline"
               className="w-full rounded-xl py-6"
-              onClick={() => {}}
+              onClick={() => navigate({ to: '/client/dashboard' })}
             >
               Ruang kerja
             </Button>

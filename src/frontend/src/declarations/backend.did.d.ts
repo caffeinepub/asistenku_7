@@ -31,6 +31,7 @@ export interface UserProfile {
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface UserRow { 'userId' : Principal, 'profile' : UserProfile }
 export interface WithdrawRequest {
   'id' : bigint,
   'status' : WithdrawStatus,
@@ -43,6 +44,10 @@ export type WithdrawStatus = { 'pending' : null } |
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'checkRoleAndStatus' : ActorMethod<
+    [],
+    { 'role' : string, 'isActive' : boolean }
+  >,
   'claimSuperadmin' : ActorMethod<[], boolean>,
   'createTicket' : ActorMethod<[string, UserRole], TicketId>,
   'createWithdrawRequest' : ActorMethod<[bigint], bigint>,
@@ -64,12 +69,15 @@ export interface _SERVICE {
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'hasSuperadmin' : ActorMethod<[], boolean>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'isSuperadmin' : ActorMethod<[], boolean>,
   'listAllTickets' : ActorMethod<[], Array<Ticket>>,
+  'listAllUsers' : ActorMethod<[], Array<UserRow>>,
   'listAllWithdrawRequests' : ActorMethod<[], Array<WithdrawRequest>>,
   'listMyTickets' : ActorMethod<[], Array<Ticket>>,
   'listMyWithdrawRequests' : ActorMethod<[], Array<WithdrawRequest>>,
   'listTicketsByTargetRole' : ActorMethod<[UserRole], Array<Ticket>>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'setUserActiveStatus' : ActorMethod<[Principal, boolean], boolean>,
   'updateTicketStatus' : ActorMethod<[TicketId, TicketStatus], undefined>,
   'updateWithdrawStatus' : ActorMethod<[bigint, WithdrawStatus], undefined>,
 }

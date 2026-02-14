@@ -3,28 +3,23 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useActor } from '@/hooks/useActor';
-import { Loader2 } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { getWorkspaceRoles, getRoleRoute, hasRoleRoute } from '@/utils/internalRoleRouting';
+import { toast } from 'sonner';
 
-const roles = [
-  { name: 'Admin', key: 'admin' },
-  { name: 'Asistenmu', key: 'asistenmu' },
-  { name: 'Concierge', key: 'concierge' },
-  { name: 'Strategic Partner', key: 'strategicpartner' },
-  { name: 'Manajer', key: 'manajer' },
-  { name: 'Finance', key: 'finance' },
-  { name: 'Management', key: 'management' },
-];
-
-// Extended interface for superadmin methods
+// Extended interface for superadmin and role check methods
 interface ExtendedActor {
   hasSuperadmin(): Promise<boolean>;
-  claimSuperadmin(): Promise<{ ok: boolean; message: string }>;
+  claimSuperadmin(): Promise<boolean>;
+  checkRoleAndStatus(): Promise<{ role: string; isActive: boolean }>;
 }
 
 export default function InternalLogin() {
   const { login, clear, identity, loginStatus } = useInternetIdentity();
   const { actor } = useActor();
-  const [preparingWorkspace, setPreparingWorkspace] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
+  const [checkingRole, setCheckingRole] = useState<Record<string, boolean>>({});
   const [hasSuperadmin, setHasSuperadmin] = useState<boolean | null>(null);
   const [claimingSuper, setClaimingSuper] = useState(false);
   const [claimError, setClaimError] = useState<string | null>(null);
@@ -63,13 +58,14 @@ export default function InternalLogin() {
     
     try {
       const extendedActor = actor as unknown as ExtendedActor;
-      const result = await extendedActor.claimSuperadmin();
-      if (result.ok) {
+      const success = await extendedActor.claimSuperadmin();
+      if (success) {
         // Refresh hasSuperadmin state
         const newStatus = await extendedActor.hasSuperadmin();
         setHasSuperadmin(newStatus);
+        toast.success('Superadmin claimed successfully');
       } else {
-        setClaimError(result.message);
+        setClaimError('Superadmin sudah di-claim');
       }
     } catch (error: any) {
       setClaimError(error.message || 'Gagal claim superadmin');
@@ -78,12 +74,62 @@ export default function InternalLogin() {
     }
   };
 
-  const handleWorkspaceClick = (roleKey: string) => {
-    setPreparingWorkspace((prev) => ({
-      ...prev,
-      [roleKey]: true,
-    }));
+  const handleWorkspaceClick = async (roleKey: string) => {
+    if (!actor || !isAuthenticated) {
+      toast.error('Silakan login terlebih dahulu');
+      return;
+    }
+
+    setCheckingRole((prev) => ({ ...prev, [roleKey]: true }));
+
+    try {
+      const extendedActor = actor as unknown as ExtendedActor;
+      const { role, isActive } = await extendedActor.checkRoleAndStatus();
+
+      // Check if user is inactive
+      if (!isActive) {
+        toast.error('Akun Anda belum aktif. Menunggu persetujuan admin.', {
+          duration: 5000,
+        });
+        setCheckingRole((prev) => ({ ...prev, [roleKey]: false }));
+        return;
+      }
+
+      // Check if role matches the clicked workspace
+      if (role !== roleKey) {
+        toast.error(`Silakan klik workspace sesuai dengan role Anda: ${role}`, {
+          duration: 5000,
+        });
+        setCheckingRole((prev) => ({ ...prev, [roleKey]: false }));
+        return;
+      }
+
+      // Role matches and is active - navigate to dashboard
+      const route = getRoleRoute(roleKey);
+      if (route) {
+        navigate({ to: route });
+      } else {
+        toast.info('Dashboard belum tersedia untuk role ini', {
+          duration: 3000,
+        });
+        setCheckingRole((prev) => ({ ...prev, [roleKey]: false }));
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || String(error);
+      if (errorMessage.includes('User profile not found')) {
+        toast.error('Profil tidak ditemukan. Silakan daftar terlebih dahulu.', {
+          duration: 5000,
+        });
+      } else {
+        toast.error(errorMessage, {
+          duration: 5000,
+        });
+      }
+      setCheckingRole((prev) => ({ ...prev, [roleKey]: false }));
+    }
   };
+
+  const workspaceRoles = getWorkspaceRoles();
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6">
@@ -116,7 +162,7 @@ export default function InternalLogin() {
               </div>
             )}
 
-            {hasSuperadmin === false && (
+            {hasSuperadmin === false && isAuthenticated && (
               <Card className="rounded-2xl border-2 border-amber-400 bg-amber-50 shadow-md">
                 <CardContent className="p-6 space-y-4">
                   <div>
@@ -151,7 +197,7 @@ export default function InternalLogin() {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-              {roles.map((role) => (
+              {workspaceRoles.map((role) => (
                 <Card
                   key={role.key}
                   className="rounded-2xl border border-gray-200 hover:border-teal-300 hover:shadow-md transition-all duration-200"
@@ -159,7 +205,7 @@ export default function InternalLogin() {
                   <CardContent className="p-6 space-y-4">
                     <div>
                       <h3 className="text-lg font-medium text-gray-900">
-                        {role.name}
+                        {role.label}
                       </h3>
                       <p className="text-sm text-gray-600 mt-1">Masuk ke workspace</p>
                     </div>
@@ -167,15 +213,17 @@ export default function InternalLogin() {
                       variant="outline"
                       className="w-full rounded-xl border-teal-600 text-teal-600 hover:bg-teal-50"
                       onClick={() => handleWorkspaceClick(role.key)}
-                      disabled={!isAuthenticated}
+                      disabled={!isAuthenticated || checkingRole[role.key]}
                     >
-                      Workspace
+                      {checkingRole[role.key] ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Checking...
+                        </>
+                      ) : (
+                        'Workspace'
+                      )}
                     </Button>
-                    {preparingWorkspace[role.key] && (
-                      <p className="text-xs text-gray-500 text-center">
-                        Workspace sedang dipersiapkan.
-                      </p>
-                    )}
                   </CardContent>
                 </Card>
               ))}

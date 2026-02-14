@@ -7,6 +7,10 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export interface UserRow {
+    userId: Principal;
+    profile: UserProfile;
+}
 export interface Ticket {
     id: TicketId;
     status: TicketStatus;
@@ -45,6 +49,10 @@ export enum WithdrawStatus {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    checkRoleAndStatus(): Promise<{
+        role: string;
+        isActive: boolean;
+    }>;
     claimSuperadmin(): Promise<boolean>;
     createTicket(description: string, targetRole: UserRole): Promise<TicketId>;
     createWithdrawRequest(amount: bigint): Promise<bigint>;
@@ -63,12 +71,15 @@ export interface backendInterface {
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     hasSuperadmin(): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
+    isSuperadmin(): Promise<boolean>;
     listAllTickets(): Promise<Array<Ticket>>;
+    listAllUsers(): Promise<Array<UserRow>>;
     listAllWithdrawRequests(): Promise<Array<WithdrawRequest>>;
     listMyTickets(): Promise<Array<Ticket>>;
     listMyWithdrawRequests(): Promise<Array<WithdrawRequest>>;
     listTicketsByTargetRole(role: UserRole): Promise<Array<Ticket>>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    setUserActiveStatus(target: Principal, active: boolean): Promise<boolean>;
     updateTicketStatus(ticketId: TicketId, newStatus: TicketStatus): Promise<void>;
     updateWithdrawStatus(requestId: bigint, newStatus: WithdrawStatus): Promise<void>;
 }

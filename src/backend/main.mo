@@ -35,6 +35,11 @@ actor {
     isActive : Bool;
   };
 
+  public type UserRow = {
+    userId : Principal;
+    profile : UserProfile;
+  };
+
   public type PartnerProfile = {
     userId : Principal;
     ratePerHour : Nat;
@@ -80,6 +85,20 @@ actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
+  // Allowed roles constant array for validation
+  let allowedRoles = [
+    "superadmin",
+    "admin",
+    "concierge",
+    "strategicpartner",
+    "manajer",
+    "finance",
+    "management",
+    "asistenmu",
+    "client",
+    "partner",
+  ];
+
   public query func hasSuperadmin() : async Bool {
     switch (superadminPrincipal) {
       case (null) { false };
@@ -101,11 +120,79 @@ actor {
     };
   };
 
+  // Superadmin role check
+  public query ({ caller }) func isSuperadmin() : async Bool {
+    switch (superadminPrincipal, caller) {
+      case (?superadmin, admin_caller) { superadmin == admin_caller };
+      case (_) { false };
+    };
+  };
+
+  // Role check and status verification
+  public query ({ caller }) func checkRoleAndStatus() : async { role : Text; isActive : Bool } {
+    switch (userProfiles.get(caller)) {
+      case (null) { Runtime.trap("User profile not found") };
+      case (?profile) {
+        { role = profile.role; isActive = profile.isActive };
+      };
+    };
+  };
+
+  // List all users - Restricted to SUPERADMIN only (not even admins)
+  public query ({ caller }) func listAllUsers() : async [UserRow] {
+    switch (superadminPrincipal) {
+      case (?superadmin) {
+        if (caller == superadmin) {
+          return userProfiles.toArray().map(func((userId, profile)) { { userId; profile } });
+        } else {
+          Runtime.trap("Unauthorized: Only superadmin can list all users");
+        };
+      };
+      case (null) {
+        Runtime.trap("Unauthorized: Only superadmin can list all users");
+      };
+    };
+  };
+
+  // Set user active status - implementation per requirements
+  public shared ({ caller }) func setUserActiveStatus(target : Principal, active : Bool) : async Bool {
+    // Check if superadmin has been claimed
+    switch (superadminPrincipal) {
+      case (null) {
+        Runtime.trap("Superadmin role must be claimed first");
+      };
+      case (?superadmin) {
+        // Check if caller is the superadmin
+        if (caller != superadmin) {
+          Runtime.trap("Only superadmin can change active status for other users");
+        };
+        // Check if target is the superadmin (cannot change superadmin's own status)
+        if (target == superadmin) {
+          Runtime.trap("Superadmin status cannot be changed");
+        };
+        // Check if target user profile exists
+        switch (userProfiles.get(target)) {
+          case (null) { 
+            Runtime.trap("Target user profile not found") 
+          };
+          case (?entry) {
+            // Update the target user's isActive flag
+            let updatedProfile = { 
+              name = entry.name;
+              email = entry.email;
+              role = entry.role;
+              isActive = active 
+            };
+            userProfiles.add(target, updatedProfile);
+            return true;
+          };
+        };
+      };
+    };
+  };
+
   // User Profile Methods
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access profiles");
-    };
     userProfiles.get(caller);
   };
 
@@ -117,10 +204,21 @@ actor {
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
+    // Validate requested role against allowed roles list
+    let isValidRole = allowedRoles.any(func(allowedRole) { allowedRole == profile.role });
+    if (not isValidRole) {
+      Runtime.trap("Invalid role: Requested role is not allowed");
     };
-    userProfiles.add(caller, profile);
+
+    // For self-registration, always set isActive to false (pending/nonactive)
+    let newProfile = {
+      name = profile.name;
+      email = profile.email;
+      role = profile.role;
+      isActive = false;
+    };
+
+    userProfiles.add(caller, newProfile);
   };
 
   // Helper to check if internal user is active

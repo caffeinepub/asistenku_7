@@ -89,6 +89,10 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface UserRow {
+    userId: Principal;
+    profile: UserProfile;
+}
 export interface Ticket {
     id: TicketId;
     status: TicketStatus;
@@ -128,6 +132,10 @@ export enum WithdrawStatus {
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    checkRoleAndStatus(): Promise<{
+        role: string;
+        isActive: boolean;
+    }>;
     claimSuperadmin(): Promise<boolean>;
     createTicket(description: string, targetRole: UserRole): Promise<TicketId>;
     createWithdrawRequest(amount: bigint): Promise<bigint>;
@@ -146,12 +154,15 @@ export interface backendInterface {
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     hasSuperadmin(): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
+    isSuperadmin(): Promise<boolean>;
     listAllTickets(): Promise<Array<Ticket>>;
+    listAllUsers(): Promise<Array<UserRow>>;
     listAllWithdrawRequests(): Promise<Array<WithdrawRequest>>;
     listMyTickets(): Promise<Array<Ticket>>;
     listMyWithdrawRequests(): Promise<Array<WithdrawRequest>>;
     listTicketsByTargetRole(role: UserRole): Promise<Array<Ticket>>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    setUserActiveStatus(target: Principal, active: boolean): Promise<boolean>;
     updateTicketStatus(ticketId: TicketId, newStatus: TicketStatus): Promise<void>;
     updateWithdrawStatus(requestId: bigint, newStatus: WithdrawStatus): Promise<void>;
 }
@@ -183,6 +194,23 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async checkRoleAndStatus(): Promise<{
+        role: string;
+        isActive: boolean;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.checkRoleAndStatus();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.checkRoleAndStatus();
             return result;
         }
     }
@@ -334,6 +362,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async isSuperadmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isSuperadmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isSuperadmin();
+            return result;
+        }
+    }
     async listAllTickets(): Promise<Array<Ticket>> {
         if (this.processError) {
             try {
@@ -346,6 +388,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.listAllTickets();
             return from_candid_vec_n7(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async listAllUsers(): Promise<Array<UserRow>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listAllUsers();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listAllUsers();
+            return result;
         }
     }
     async listAllWithdrawRequests(): Promise<Array<WithdrawRequest>> {
@@ -415,6 +471,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.saveCallerUserProfile(arg0);
+            return result;
+        }
+    }
+    async setUserActiveStatus(arg0: Principal, arg1: boolean): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setUserActiveStatus(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setUserActiveStatus(arg0, arg1);
             return result;
         }
     }

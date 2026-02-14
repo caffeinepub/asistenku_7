@@ -1,79 +1,150 @@
 {
   "kind": "build_request",
-  "title": "Register internal dashboard routes in frontend/src/App.tsx (no refactors)",
+  "title": "Strict frontend-only merge: pending client/partner activation workflow",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update `frontend/src/App.tsx` to register new TanStack Router routes for the existing dashboard pages, without changing or removing any existing routes, router structure, or other code. Add the new routes only by (1) adding imports if missing and (2) adding new `createRoute({ ... })` definitions, and (3) appending the new route variables into `routeTree = rootRoute.addChildren([ ... ])`.",
+      "text": "Update `frontend/src/pages/superadmin/SuperadminDashboard.tsx` to show ONLY pending users with role `client` or `partner` (i.e., `isActive === false`) in the Status User tab, and replace the entire table section with the user-provided table markup, including: (1) `formatPrincipal` helper that truncates ONLY for display, (2) `handleCopy` helper that copies the FULL principal to clipboard, (3) `pendingUsers` filtering, (4) a `No` column, (5) Status badge always showing `Pending`, and (6) an action button that calls `handleToggleStatus(user)` labeled `Aktifkan`.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "recent-messages"
         ],
         "quotes": [
-          "Tambahkan routing dashboard berikut ke dalam file: frontend/src/App.tsx",
-          "Jangan mengubah routing yang sudah ada. Jangan menghapus apa pun. Jangan refactor. Jangan improve. Jangan ubah struktur router.",
-          "Hanya tambahkan route baru di bagian routeTree = rootRoute.addChildren([...]).",
-          "Gunakan component dashboard yang sudah ada sesuai nama file masing-masing. Jangan buat component baru.",
-          "Jangan menyentuh file lain."
+          "✅ UPDATE SuperadminDashboard.tsx (FULL REPLACE TABLE SECTION)\n\nTambahkan helper di atas return:\n\nconst formatPrincipal = (principal: string) => {\n  if (principal.length <= 20) return principal;\n  return principal.slice(0, 8) + \"...\" + principal.slice(-6);\n};\n\nconst handleCopy = (text: string) => {\n  navigator.clipboard.writeText(text);\n};\n\nconst pendingUsers = users.filter(\n  (u) =>\n    (u.role === \"client\" || u.role === \"partner\") &&\n    u.isActive === false\n);\n\n---\n\nGANTI SELURUH TABLE MENJADI:\n\n<Table>\n  <TableHeader>\n    <TableRow>\n      <TableHead>No</TableHead>\n      <TableHead>Principal</TableHead>\n      <TableHead>Nama</TableHead>\n      <TableHead>Email</TableHead>\n      <TableHead>Role</TableHead>\n      <TableHead>Status</TableHead>\n      <TableHead className=\"text-right\">Aksi</TableHead>\n    </TableRow>\n  </TableHeader>\n\n  <TableBody>\n    {pendingUsers.map((user, index) => (\n      <TableRow key={user.principal}>\n        <TableCell>{index + 1}</TableCell>\n\n        <TableCell className=\"font-mono text-xs space-y-1\">\n          <div>{formatPrincipal(user.principal)}</div>\n          <div className=\"flex gap-2\">\n            <Button\n              size=\"sm\"\n              variant=\"outline\"\n              onClick={() => handleCopy(user.principal)}\n            >\n              Copy Principal\n            </Button>\n          </div>\n        </TableCell>\n\n        <TableCell>{user.name}</TableCell>\n        <TableCell>{user.email}</TableCell>\n\n        <TableCell>\n          <Badge variant=\"secondary\">\n            {user.role}\n          </Badge>\n        </TableCell>\n\n        <TableCell>\n          <Badge variant=\"outline\">\n            Pending\n          </Badge>\n        </TableCell>\n\n        <TableCell className=\"text-right\">\n          <Button\n            size=\"sm\"\n            onClick={() => handleToggleStatus(user)}\n          >\n            Aktifkan\n          </Button>\n        </TableCell>\n      </TableRow>\n    ))}\n  </TableBody>\n</Table>\n\n---\n\n🔒 FINAL RULES\n\nPrincipal tidak pernah dipotong di backend\n\nDisplay saja yang dipotong\n\nCopy selalu full\n\nSuperadmin hanya lihat pending client & partner"
         ]
       },
       "acceptanceCriteria": [
-        "Only `frontend/src/App.tsx` is changed; no other files are modified.",
-        "Existing imports, routes, and router setup remain unchanged except for adding necessary imports and new route definitions.",
-        "New routes are added only as additional `createRoute` constants and included in `rootRoute.addChildren([ ... ])` (no router refactor)."
+        "On the Superadmin dashboard's \"Status User\" tab, only users where `(role === \"client\" || role === \"partner\") && isActive === false` are rendered in the table.",
+        "The Principal cell shows truncated text via `formatPrincipal(...)` but the Copy button copies the full `user.principal` value to the clipboard.",
+        "The table columns and layout exactly match the provided replacement table (including `No` column and `Copy Principal` button).",
+        "The Status column always displays a badge with text `Pending` for all rendered rows.",
+        "No other roles (including superadmin/admin/etc.) appear in this table regardless of backend data."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add routes with the exact paths below, each mapping to the existing dashboard component (default export) from the corresponding file:\n- `/superadmin/dashboard` -> `SuperadminDashboard` from `frontend/src/pages/superadmin/SuperadminDashboard.tsx`\n- `/admin/dashboard` -> `AdminDashboard` from `frontend/src/pages/admin/AdminDashboard.tsx`\n- `/asistenmu/dashboard` -> `AsistenmuDashboard` from `frontend/src/pages/asistenmu/AsistenmuDashboard.tsx`\n- `/concierge/dashboard` -> `ConciergeDashboard` from `frontend/src/pages/concierge/ConciergeDashboard.tsx`\n- `/strategicpartner/dashboard` -> `StrategicPartnerDashboard` from `frontend/src/pages/strategicpartner/StrategicPartnerDashboard.tsx`\n- `/management/dashboard` -> `ManagementDashboard` from `frontend/src/pages/management/ManagementDashboard.tsx`\n- `/finance/dashboard` -> `FinanceDashboard` from `frontend/src/pages/finance/FinanceDashboard.tsx`\n\nIf a component is already imported in `App.tsx`, do not modify that import; if it is not imported, add an import line only (no other import changes).",
+      "text": "Update the `handleToggleStatus` function in `frontend/src/pages/superadmin/SuperadminDashboard.tsx` to exactly follow the user-provided implementation: always call `setUserActiveStatus(targetPrincipal, true)` (activation only) and then refresh the list by calling `fetchUsers()`.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "recent-messages"
         ],
         "quotes": [
-          "Pastikan path persis seperti ini:",
-          "/superadmin/dashboard",
-          "/admin/dashboard",
-          "/asistenmu/dashboard",
-          "/concierge/dashboard",
-          "/strategicpartner/dashboard",
-          "/management/dashboard",
-          "/finance/dashboard",
-          "SuperadminDashboard → frontend/src/pages/superadmin/SuperadminDashboard.tsx",
-          "AdminDashboard → frontend/src/pages/admin/AdminDashboard.tsx",
-          "AsistenmuDashboard → frontend/src/pages/asistenmu/AsistenmuDashboard.tsx",
-          "ConciergeDashboard → frontend/src/pages/concierge/ConciergeDashboard.tsx",
-          "StrategicpartnerDashboard → frontend/src/pages/strategicpartner/StrategicpartnerDashboard.tsx",
-          "ManagementDashboard → frontend/src/pages/management/ManagementDashboard.tsx",
-          "FinanceDashboard → frontend/src/pages/finance/FinanceDashboard.tsx"
+          "✅ UPDATE handleToggleStatus FUNCTION\n\nPastikan function ini ada:\n\nconst handleToggleStatus = async (user: any) => {\n  if (!actor) return;\n\n  try {\n    const { Principal } = await import(\"@dfinity/principal\");\n    const targetPrincipal = Principal.fromText(user.principal);\n\n    const extendedActor = actor as any;\n    await extendedActor.setUserActiveStatus(targetPrincipal, true);\n\n    await fetchUsers();\n  } catch (err) {\n    console.error(err);\n  }\n};\n\n---\n\n🔒 FINAL RULES\n\nStatus aktif hanya bisa via superadmin"
         ]
       },
       "acceptanceCriteria": [
-        "Navigating to each of the 7 listed paths renders the corresponding existing dashboard component instead of the 404 page.",
-        "The route `path` strings match exactly the requested paths (including leading slashes and spelling).",
-        "No new dashboard components are created and no existing dashboard files are edited.",
-        "All new route constants are included in the `routeTree` children array (appended without removing existing entries)."
+        "Clicking `Aktifkan` in the pending users table calls `setUserActiveStatus(Principal.fromText(user.principal), true)`.",
+        "After successful activation, the UI refreshes the list via `fetchUsers()` and the activated user disappears from the pending list.",
+        "The function does not toggle to false; it only activates (sets `true`).",
+        "Errors are handled by logging to console (no new error UI requirements introduced)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Update client registration submission in `frontend/src/pages/client/RegisterClient.tsx` so that submitting the form calls `actor.saveCallerUserProfile` with `role: \"client\"` and `isActive: false` (pending by default) and then sets the submitted state to true. Ensure the form data fields are wired so the call sends the name and email values correctly.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "✅ REGISTER CLIENT & PARTNER (PASTIKAN SAVE PROFILE CALL)\n\nDi RegisterClient.tsx dan RegisterPartner.tsx\n\nGANTI handleSubmit menjadi:\n\nconst handleSubmit = async (e: React.FormEvent) => {\n  e.preventDefault();\n  if (!actor) return;\n\n  try {\n    await actor.saveCallerUserProfile({\n      name: formData.name,\n      email: formData.email,\n      role: \"client\", // ganti ke \"partner\" di RegisterPartner\n      isActive: false,\n    });\n\n    setSubmitted(true);\n  } catch (err) {\n    console.error(err);\n  }\n};\n\n---\n\nStatus default register = pending (isActive = false)\n\nTidak ada perubahan role\n\n1 principal = 1 role"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submitting the Client registration form calls `saveCallerUserProfile` on the existing frontend actor.",
+        "The payload includes `role: \"client\"` and `isActive: false`.",
+        "After a successful call, the page transitions to the submitted/confirmation UI by setting `submitted` to `true`.",
+        "No routing changes and no backend changes are introduced."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Update partner registration submission in `frontend/src/pages/partner/RegisterPartner.tsx` so that submitting the form calls `actor.saveCallerUserProfile` with `role: \"partner\"` and `isActive: false` (pending by default) and then sets the submitted state to true. Ensure the form data fields are wired so the call sends the name and email values correctly.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "✅ REGISTER CLIENT & PARTNER (PASTIKAN SAVE PROFILE CALL)\n\nDi RegisterClient.tsx dan RegisterPartner.tsx\n\nGANTI handleSubmit menjadi:\n\nconst handleSubmit = async (e: React.FormEvent) => {\n  e.preventDefault();\n  if (!actor) return;\n\n  try {\n    await actor.saveCallerUserProfile({\n      name: formData.name,\n      email: formData.email,\n      role: \"client\", // ganti ke \"partner\" di RegisterPartner\n      isActive: false,\n    });\n\n    setSubmitted(true);\n  } catch (err) {\n    console.error(err);\n  }\n};\n\n---\n\nStatus default register = pending (isActive = false)\n\nTidak ada perubahan role\n\n1 principal = 1 role"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submitting the Partner registration form calls `saveCallerUserProfile` on the existing frontend actor.",
+        "The payload includes `role: \"partner\"` and `isActive: false`.",
+        "After a successful call, the page transitions to the submitted/confirmation UI by setting `submitted` to `true`.",
+        "No routing changes and no backend changes are introduced."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Update the workspace button behavior in `frontend/src/pages/client/LoginClient.tsx` and `frontend/src/pages/partner/LoginPartner.tsx` so that the workspace button only performs manual navigation to the specified routes and does not trigger any auto-redirect logic.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "✅ LOGIN CLIENT & PARTNER (RUANG KERJA BUTTON)\n\nPastikan tombol ruang kerja hanya navigate manual:\n\n<Button\n  variant=\"outline\"\n  onClick={() => navigate(\"/client/dashboard\")}\n>\n  Ruang kerja\n</Button>\n\nUntuk partner:\n\n<Button\n  variant=\"outline\"\n  onClick={() => navigate(\"/partner/dashboard\")}\n>\n  Masuk ke ruang kerja\n</Button>\n\n---\n\n🔒 FINAL RULES\n\nTidak ada auto redirect"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Client login page workspace button navigates to `/client/dashboard` via `navigate(\"/client/dashboard\")` on click.",
+        "Partner login page workspace button navigates to `/partner/dashboard` via `navigate(\"/partner/dashboard\")` on click.",
+        "No additional redirects are added on page load or after login; navigation occurs only when the workspace button is clicked."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Update the footer text shown in `frontend/src/pages/superadmin/SuperadminDashboard.tsx` to exactly: `PT. Asistenku Digital Indonesia. Semua Hak dilindungi.`",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "Ganti text di footer dashboard superadmin menjadi PT. Asistenku Digital Indonesia. Semua Hak dilindungi."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Superadmin dashboard footer displays the exact requested text: `PT. Asistenku Digital Indonesia. Semua Hak dilindungi.`"
       ]
     }
   ],
   "constraints": [
-    "Do not modify or remove any existing routes in `frontend/src/App.tsx`.",
-    "Do not refactor, reorganize, or \"improve\" the router structure; only add what is necessary to register the new routes.",
-    "Do not delete anything from `frontend/src/App.tsx`.",
-    "Do not touch any other files besides `frontend/src/App.tsx`.",
-    "If an import already exists, do not change it; only add missing imports."
+    "Do not modify the backend (no changes to `backend/main.mo` and no backend schema changes).",
+    "Do not change routing (no modifications to `frontend/src/App.tsx` route definitions and no path changes).",
+    "Do not introduce additional features or refactors; only merge the specified logic.",
+    "Principal strings must never be truncated in the backend; truncation is display-only in the Superadmin UI.",
+    "Copy action must always copy the full principal string.",
+    "Superadmin dashboard must only list pending users for roles `client` and `partner`.",
+    "Do not change user roles; do not add role reassignment flows. One principal must remain associated with exactly one role.",
+    "Do not add auto-redirect behavior to client/partner login flows."
   ],
   "nonGoals": [
-    "Implementing any new dashboard UI or logic.",
-    "Adding authentication/authorization checks for these routes.",
-    "Changing existing 404 page text/copy or styling.",
-    "Renaming/moving dashboard files or components."
+    "Implementing or changing Internet Identity login behavior on client/partner login pages (beyond the workspace button navigation).",
+    "Adding new backend methods or changing authorization rules.",
+    "Changing internal role dropdown filtering or internal registration behavior beyond what is required by this request.",
+    "Adding toast notifications or additional UI states not explicitly requested."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for any user-facing text in the build request itself (spec/requirements)."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

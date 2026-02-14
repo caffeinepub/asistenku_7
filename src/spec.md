@@ -1,18 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Register existing internal dashboard pages as new TanStack Router routes in `frontend/src/App.tsx` without changing any existing routing code.
+**Goal:** Implement a strict frontend-only pending client/partner activation workflow, including pending-only listing in Superadmin and pending-by-default registration.
 
 **Planned changes:**
-- In `frontend/src/App.tsx`, add missing imports for the existing dashboard page components (only if not already imported).
-- Add new `createRoute({ ... })` route constants for the 7 dashboard paths:
-  - `/superadmin/dashboard` -> `SuperadminDashboard`
-  - `/admin/dashboard` -> `AdminDashboard`
-  - `/asistenmu/dashboard` -> `AsistenmuDashboard`
-  - `/concierge/dashboard` -> `ConciergeDashboard`
-  - `/strategicpartner/dashboard` -> `StrategicPartnerDashboard`
-  - `/management/dashboard` -> `ManagementDashboard`
-  - `/finance/dashboard` -> `FinanceDashboard`
-- Append the new route constants into `routeTree = rootRoute.addChildren([ ... ])` without removing or modifying existing entries.
+- Update `frontend/src/pages/superadmin/SuperadminDashboard.tsx` “Status User” tab to render only pending users where `(role === "client" || role === "partner") && isActive === false`, and replace the entire table section with the provided markup (including `formatPrincipal`, `handleCopy`, `pendingUsers`, `No` column, constant `Pending` status badge, and an `Aktifkan` action that calls `handleToggleStatus(user)`).
+- Update `handleToggleStatus` in `SuperadminDashboard.tsx` to activation-only behavior: call `setUserActiveStatus(Principal.fromText(user.principal), true)` and then refresh via `fetchUsers()`.
+- Update `frontend/src/pages/client/RegisterClient.tsx` submission to call `actor.saveCallerUserProfile` with `{ name, email, role: "client", isActive: false }` and set `submitted` to `true` on success.
+- Update `frontend/src/pages/partner/RegisterPartner.tsx` submission to call `actor.saveCallerUserProfile` with `{ name, email, role: "partner", isActive: false }` and set `submitted` to `true` on success.
+- Update workspace button behavior in `frontend/src/pages/client/LoginClient.tsx` and `frontend/src/pages/partner/LoginPartner.tsx` to be manual navigation only (no auto-redirect), navigating to `/client/dashboard` and `/partner/dashboard` respectively.
+- Update the Superadmin dashboard footer text to: `PT. Asistenku Digital Indonesia. Semua Hak dilindungi.`
 
-**User-visible outcome:** Visiting each of the 7 new dashboard URLs renders the correct existing dashboard page instead of the 404 page, with all existing routes continuing to work unchanged.
+**User-visible outcome:** Superadmins see only pending client/partner accounts in the Status User tab, can copy full principals and activate users so they disappear from the pending list; newly registered clients/partners are saved as pending by default; client/partner workspace access occurs only via the workspace button without auto-redirect.

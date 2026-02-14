@@ -39,7 +39,7 @@ export default function LoginPartner() {
               <Button
                 variant="outline"
                 className="w-full rounded-xl py-6"
-                onClick={() => {}}
+                onClick={() => navigate({ to: '/partner/dashboard' })}
               >
                 Masuk ke ruang kerja
               </Button>

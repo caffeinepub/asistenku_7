@@ -1,27 +1,60 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Add dashboard routes to frontend router configuration in frontend/src/App.tsx without modifying existing routes/components.",
+  "summary": "Implement strict frontend-only updates for superadmin user activation workflow and client/partner registration/login behavior: superadmin sees only pending client/partner users, can copy full principal, activates users via existing actor method; registration saves profile with isActive=false; login workspace buttons navigate manually; update superadmin footer text. No backend or routing changes.",
   "architectural_notes": [
-    "Router structure must not be refactored; only append new routes inside routeTree = rootRoute.addChildren([...]).",
-    "Do not modify existing routes/imports/components; add imports only if missing and register routes to prevent 404."
+    "Strict constraint: frontend-only changes; do not touch backend, routing, or role assignment logic",
+    "PrincipalID must never be truncated in backend; truncate for display only; copy action must copy full principal",
+    "Superadmin view is limited to pending users with role client/partner (isActive=false); activation only via superadmin"
   ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-frontend-src-app-tsx-to-register-new-tanstack-router-routes-for-the-existing-dashboard-pages-without-changing-or-removing-any-existing-routes-router-structure-or-other-code-add-the-new-routes-only-by-1-adding-imports-if-missing-and-2-adding-new-createroute-definitions-and-3-appending-the-new-route-variables-into-routetree-rootroute-addchildren",
-      "title": "Update `frontend/src/App.tsx` to register new TanStack Router routes for the existing dashboard pages, without changing or removing any existing routes, router structure, or other code. Add the new routes only by (1) adding imports if missing and (2) adding new `createRoute({ ... })` definitions, and (3) appending the new route variables into `routeTree = rootRoute.addChildren([ ... ])`.",
+      "id": "feature-update-frontend-src-pages-superadmin-superadmindashboard-tsx-to-show-only-pending-users-with-role-client-or-partner-i-e-isactive-false-in-the-status-user-tab-and-replace-the-entire-table-section-with-the-user-provided-table-markup-including-1-formatprincipal-helper-that-truncates-only-for-display-2-handlecopy-helper-that-copies-the-full-principal-to-clipboard-3-pendingusers-filtering-4-a-no-column-5-status-badge-always-showing-pending-and-6-an-action-button-that-calls-handletogglestatus-user-labeled-aktifkan",
+      "title": "Update `frontend/src/pages/superadmin/SuperadminDashboard.tsx` to show ONLY pending users with role `client` or `partner` (i.e., `isActive === false`) in the Status User tab, and replace the entire table section with the user-provided table markup, including: (1) `formatPrincipal` helper that truncates ONLY for display, (2) `handleCopy` helper that copies the FULL principal to clipboard, (3) `pendingUsers` filtering, (4) a `No` column, (5) Status badge always showing `Pending`, and (6) an action button that calls `handleToggleStatus(user)` labeled `Aktifkan`.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-routes-with-the-exact-paths-below-each-mapping-to-the-existing-dashboard-component-default-export-from-the-corresponding-file-superadmin-dashboard-superadmindashboard-from-frontend-src-pages-superadmin-superadmindashboard-tsx-admin-dashboard-admindashboard-from-frontend-src-pages-admin-admindashboard-tsx-asistenmu-dashboard-asistenmudashboard-from-frontend-src-pages-asistenmu-asistenmudashboard-tsx-concierge-dashboard-conciergedashboard-from-frontend-src-pages-concierge-conciergedashboard-tsx-strategicpartner-dashboard-strategicpartnerdashboard-from-frontend-src-pages-strategicpartner-strategicpartnerdashboard-tsx-management-dashboard-managementdashboard-from-frontend-src-pages-management-managementdashboard-tsx-finance-dashboard-financedashboard-from-frontend-src-pages-finance-financedashboard-tsx-if-a-component-is-already-imported-in-app-tsx-do-not-modify-that-import-if-it-is-not-imported-add-an-import-line-only-no-other-import-changes",
-      "title": "Add routes with the exact paths below, each mapping to the existing dashboard component (default export) from the corresponding file:\n- `/superadmin/dashboard` -> `SuperadminDashboard` from `frontend/src/pages/superadmin/SuperadminDashboard.tsx`\n- `/admin/dashboard` -> `AdminDashboard` from `frontend/src/pages/admin/AdminDashboard.tsx`\n- `/asistenmu/dashboard` -> `AsistenmuDashboard` from `frontend/src/pages/asistenmu/AsistenmuDashboard.tsx`\n- `/concierge/dashboard` -> `ConciergeDashboard` from `frontend/src/pages/concierge/ConciergeDashboard.tsx`\n- `/strategicpartner/dashboard` -> `StrategicPartnerDashboard` from `frontend/src/pages/strategicpartner/StrategicPartnerDashboard.tsx`\n- `/management/dashboard` -> `ManagementDashboard` from `frontend/src/pages/management/ManagementDashboard.tsx`\n- `/finance/dashboard` -> `FinanceDashboard` from `frontend/src/pages/finance/FinanceDashboard.tsx`\n\nIf a component is already imported in `App.tsx`, do not modify that import; if it is not imported, add an import line only (no other import changes).",
+      "id": "feature-update-the-handletogglestatus-function-in-frontend-src-pages-superadmin-superadmindashboard-tsx-to-exactly-follow-the-user-provided-implementation-always-call-setuseractivestatus-targetprincipal-true-activation-only-and-then-refresh-the-list-by-calling-fetchusers",
+      "title": "Update the `handleToggleStatus` function in `frontend/src/pages/superadmin/SuperadminDashboard.tsx` to exactly follow the user-provided implementation: always call `setUserActiveStatus(targetPrincipal, true)` (activation only) and then refresh the list by calling `fetchUsers()`.",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-client-registration-submission-in-frontend-src-pages-client-registerclient-tsx-so-that-submitting-the-form-calls-actor-savecalleruserprofile-with-role-client-and-isactive-false-pending-by-default-and-then-sets-the-submitted-state-to-true-ensure-the-form-data-fields-are-wired-so-the-call-sends-the-name-and-email-values-correctly",
+      "title": "Update client registration submission in `frontend/src/pages/client/RegisterClient.tsx` so that submitting the form calls `actor.saveCallerUserProfile` with `role: \"client\"` and `isActive: false` (pending by default) and then sets the submitted state to true. Ensure the form data fields are wired so the call sends the name and email values correctly.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-partner-registration-submission-in-frontend-src-pages-partner-registerpartner-tsx-so-that-submitting-the-form-calls-actor-savecalleruserprofile-with-role-partner-and-isactive-false-pending-by-default-and-then-sets-the-submitted-state-to-true-ensure-the-form-data-fields-are-wired-so-the-call-sends-the-name-and-email-values-correctly",
+      "title": "Update partner registration submission in `frontend/src/pages/partner/RegisterPartner.tsx` so that submitting the form calls `actor.saveCallerUserProfile` with `role: \"partner\"` and `isActive: false` (pending by default) and then sets the submitted state to true. Ensure the form data fields are wired so the call sends the name and email values correctly.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-workspace-button-behavior-in-frontend-src-pages-client-loginclient-tsx-and-frontend-src-pages-partner-loginpartner-tsx-so-that-the-workspace-button-only-performs-manual-navigation-to-the-specified-routes-and-does-not-trigger-any-auto-redirect-logic",
+      "title": "Update the workspace button behavior in `frontend/src/pages/client/LoginClient.tsx` and `frontend/src/pages/partner/LoginPartner.tsx` so that the workspace button only performs manual navigation to the specified routes and does not trigger any auto-redirect logic.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-footer-text-shown-in-frontend-src-pages-superadmin-superadmindashboard-tsx-to-exactly-pt-asistenku-digital-indonesia-semua-hak-dilindungi",
+      "title": "Update the footer text shown in `frontend/src/pages/superadmin/SuperadminDashboard.tsx` to exactly: `PT. Asistenku Digital Indonesia. Semua Hak dilindungi.`",
+      "reqIds": [
+        "REQ-6"
       ],
       "version": 1
     }
@@ -29,12 +62,30 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Register new dashboard routes in frontend/src/App.tsx for /superadmin/dashboard, /admin/dashboard, /asistenmu/dashboard, /concierge/dashboard, /strategicpartner/dashboard, /management/dashboard, /finance/dashboard using existing dashboard components (import if missing only)",
+      "summary": "Superadmin dashboard: show only pending client/partner users table with formatted principal display and full principal copy action; allow activation via setUserActiveStatus(true) and refresh list",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Client/Partner registration: replace handleSubmit to call saveCallerUserProfile with role and isActive=false (default pending)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Client/Partner login: workspace buttons should only navigate manually to /client/dashboard and /partner/dashboard (no auto redirect)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Superadmin dashboard footer text update to 'PT. Asistenku Digital Indonesia. Semua Hak dilindungi.'",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Register internal dashboard routes in frontend/src/App.tsx (no refactors)",
+  "projectName": "Strict frontend-only merge: pending client/partner activation workflow",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

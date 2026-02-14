@@ -13,6 +13,9 @@ import ConciergeDashboard from './pages/concierge/ConciergeDashboard';
 import StrategicPartnerDashboard from './pages/strategicpartner/StrategicPartnerDashboard';
 import ManagementDashboard from './pages/management/ManagementDashboard';
 import FinanceDashboard from './pages/finance/FinanceDashboard';
+import ClientDashboard from './pages/client/ClientDashboard';
+import PartnerDashboard from './pages/partner/PartnerDashboard';
+import ManajerDashboard from './pages/manajer/ManajerDashboard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
@@ -27,10 +30,10 @@ function NotFound() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 pb-8 text-center">
-          <p className="text-gray-600">Halaman tidak ditemukan.</p>
+          <p className="text-gray-600">Halaman tidak ditemukan</p>
           <Link to="/">
             <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl py-6">
-              Kembali
+              Kembali ke Beranda
             </Button>
           </Link>
         </CardContent>
@@ -62,6 +65,12 @@ const clientRegisterRoute = createRoute({
   component: RegisterClient,
 });
 
+const clientDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/client/dashboard',
+  component: ClientDashboard,
+});
+
 const partnerLoginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/partner/login',
@@ -72,6 +81,12 @@ const partnerRegisterRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/partner/register',
   component: RegisterPartner,
+});
+
+const partnerDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/partner/dashboard',
+  component: PartnerDashboard,
 });
 
 const internalLoginRoute = createRoute({
@@ -128,12 +143,20 @@ const financeDashboardRoute = createRoute({
   component: FinanceDashboard,
 });
 
+const manajerDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/manajer/dashboard',
+  component: ManajerDashboard,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   clientLoginRoute,
   clientRegisterRoute,
+  clientDashboardRoute,
   partnerLoginRoute,
   partnerRegisterRoute,
+  partnerDashboardRoute,
   internalLoginRoute,
   internalRegisterRoute,
   superadminDashboardRoute,
@@ -143,12 +166,17 @@ const routeTree = rootRoute.addChildren([
   strategicpartnerDashboardRoute,
   managementDashboardRoute,
   financeDashboardRoute,
+  manajerDashboardRoute,
 ]);
 
 const router = createRouter({ routeTree });
 
-function App() {
-  return <RouterProvider router={router} />;
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-export default App;
+export default function App() {
+  return <RouterProvider router={router} />;
+}

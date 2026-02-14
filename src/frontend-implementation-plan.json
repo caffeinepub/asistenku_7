@@ -1,38 +1,109 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Register internal dashboard routes in frontend/src/App.tsx (no refactors)",
+  "title": "Frontend-only: pending client/partner activation workflow merge",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Register new TanStack Router routes for existing dashboard pages in App.tsx by adding only missing imports, new createRoute constants, and appending them to routeTree children—without altering existing router setup.",
+      "summary": "In Superadmin Status User tab, render only pending client/partner users and replace the table UI with the provided markup (display truncation + full-copy).",
       "acceptanceCriteria": [
-        "Only `frontend/src/App.tsx` is changed; no other files are modified.",
-        "Existing imports, routes, and router setup remain unchanged except for adding necessary imports and new route definitions.",
-        "New routes are added only as additional `createRoute` constants and included in the `routeTree` children array (appended without removing existing entries) (no router refactor)."
+        "On the Superadmin dashboard's \"Status User\" tab, only users where `(role === \"client\" || role === \"partner\") && isActive === false` are rendered in the table.",
+        "The Principal cell shows truncated text via `formatPrincipal(...)` but the Copy button copies the full `user.principal` value to the clipboard.",
+        "The table columns and layout exactly match the provided replacement table (including `No` column and `Copy Principal` button).",
+        "The Status column always displays a badge with text `Pending` for all rendered rows.",
+        "No other roles (including superadmin/admin/etc.) appear in this table regardless of backend data."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/pages/superadmin/SuperadminDashboard.tsx",
           "operation": "modify",
-          "description": "Add missing imports for the existing dashboard page components (only if not already imported), define new `createRoute({ ... })` constants for the dashboard paths, and append the new route variables to the existing `routeTree = rootRoute.addChildren([ ... ])` array without changing/removing any existing routes or structure."
+          "description": "Replace the entire Status User tab table section with the user-provided table markup: add `formatPrincipal` (display-only truncation), `handleCopy` (copies full principal), compute `pendingUsers` filter for pending client/partner, render `No` column, always show `Pending` status badge, and keep the action button labeled `Aktifkan` calling `handleToggleStatus(user)`. Use existing shadcn-ui Table/Badge/Button components already imported for consistent UI. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Add 7 exact-path routes mapping to the corresponding existing dashboard components, ensuring they render instead of the 404 page.",
+      "summary": "Change Superadmin activation handler to activation-only (set active true) and refresh users list after.",
       "acceptanceCriteria": [
-        "Navigating to each of the 7 listed paths renders the corresponding existing dashboard component instead of the 404 page.",
-        "The route `path` strings match exactly the requested paths (including leading slashes and spelling).",
-        "No new dashboard components are created and no existing dashboard files are edited.",
-        "All new route constants are included in the `routeTree` children array (appended without removing existing entries)."
+        "Clicking `Aktifkan` in the pending users table calls `setUserActiveStatus(Principal.fromText(user.principal), true)`.",
+        "After successful activation, the UI refreshes the list via `fetchUsers()` and the activated user disappears from the pending list.",
+        "The function does not toggle to false; it only activates (sets `true`).",
+        "Errors are handled by logging to console (no new error UI requirements introduced)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/pages/superadmin/SuperadminDashboard.tsx",
           "operation": "modify",
-          "description": "Register these routes (exact `path` strings) using new `createRoute` constants that point to the default exports from the specified files, and append them to `rootRoute.addChildren([ ... ])`: `/superadmin/dashboard` -> `SuperadminDashboard` from `frontend/src/pages/superadmin/SuperadminDashboard.tsx`; `/admin/dashboard` -> `AdminDashboard` from `frontend/src/pages/admin/AdminDashboard.tsx`; `/asistenmu/dashboard` -> `AsistenmuDashboard` from `frontend/src/pages/asistenmu/AsistenmuDashboard.tsx`; `/concierge/dashboard` -> `ConciergeDashboard` from `frontend/src/pages/concierge/ConciergeDashboard.tsx`; `/strategicpartner/dashboard` -> `StrategicPartnerDashboard` from `frontend/src/pages/strategicpartner/StrategicPartnerDashboard.tsx`; `/management/dashboard` -> `ManagementDashboard` from `frontend/src/pages/management/ManagementDashboard.tsx`; `/finance/dashboard` -> `FinanceDashboard` from `frontend/src/pages/finance/FinanceDashboard.tsx`. If any of these components are already imported, do not modify that import; only add missing import lines."
+          "description": "Update `handleToggleStatus` to exactly match the provided implementation: guard on `actor`, import `Principal` dynamically, compute `targetPrincipal = Principal.fromText(user.principal)`, always call `setUserActiveStatus(targetPrincipal, true)` (no toggling), then call `fetchUsers()`; handle errors via `console.error(err)` only. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "On client registration submit, save caller profile with role client and pending status, then show submitted confirmation.",
+      "acceptanceCriteria": [
+        "Submitting the Client registration form calls `saveCallerUserProfile` on the existing frontend actor.",
+        "The payload includes `role: \"client\"` and `isActive: false`.",
+        "After a successful call, the page transitions to the submitted/confirmation UI by setting `submitted` to `true`.",
+        "No routing changes and no backend changes are introduced."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/client/RegisterClient.tsx",
+          "operation": "modify",
+          "description": "Wire form submission to the existing actor by updating `handleSubmit` to the provided async implementation: call `actor.saveCallerUserProfile({ name: formData.nama, email: formData.email, role: \"client\", isActive: false })`, then `setSubmitted(true)`, with errors logged to console. Add `useActor` hook usage/import as needed while keeping current form fields intact (ensure name/email are sent correctly). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "On partner registration submit, save caller profile with role partner and pending status, then show submitted confirmation.",
+      "acceptanceCriteria": [
+        "Submitting the Partner registration form calls `saveCallerUserProfile` on the existing frontend actor.",
+        "The payload includes `role: \"partner\"` and `isActive: false`.",
+        "After a successful call, the page transitions to the submitted/confirmation UI by setting `submitted` to `true`.",
+        "No routing changes and no backend changes are introduced."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/partner/RegisterPartner.tsx",
+          "operation": "modify",
+          "description": "Wire form submission to the existing actor by updating `handleSubmit` to the provided async implementation: call `actor.saveCallerUserProfile({ name: formData.nama, email: formData.email, role: \"partner\", isActive: false })`, then `setSubmitted(true)`, with errors logged to console. Add `useActor` hook usage/import as needed while keeping current form fields intact (ensure name/email are sent correctly). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Make client/partner workspace buttons navigate manually to their dashboard routes with no auto-redirect logic.",
+      "acceptanceCriteria": [
+        "Client login page workspace button navigates to `/client/dashboard` via `navigate(\"/client/dashboard\")` on click.",
+        "Partner login page workspace button navigates to `/partner/dashboard` via `navigate(\"/partner/dashboard\")` on click.",
+        "No additional redirects are added on page load or after login; navigation occurs only when the workspace button is clicked."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/client/LoginClient.tsx",
+          "operation": "modify",
+          "description": "Update the workspace (\"Ruang kerja\") button to perform only manual navigation on click to `/client/dashboard` using `navigate(\"/client/dashboard\")`, and ensure no new auto-redirect behavior is introduced. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/partner/LoginPartner.tsx",
+          "operation": "modify",
+          "description": "Update the workspace (\"Masuk ke ruang kerja\") button to perform only manual navigation on click to `/partner/dashboard` using `navigate(\"/partner/dashboard\")`, and ensure no new auto-redirect behavior is introduced. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Update the Superadmin dashboard footer text to the exact requested sentence.",
+      "acceptanceCriteria": [
+        "The Superadmin dashboard footer displays the exact requested text: `PT. Asistenku Digital Indonesia. Semua Hak dilindungi.`"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/superadmin/SuperadminDashboard.tsx",
+          "operation": "modify",
+          "description": "Replace the footer text content with the exact required string: `PT. Asistenku Digital Indonesia. Semua Hak dilindungi.` (no other wording/format changes beyond what is necessary). Verify the component's usage instructions before implementing."
         }
       ]
     }

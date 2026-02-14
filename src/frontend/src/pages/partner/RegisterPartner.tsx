@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from '@tanstack/react-router';
+import { useActor } from '@/hooks/useActor';
 
 export default function RegisterPartner() {
   const navigate = useNavigate();
+  const { actor } = useActor();
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     nama: '',
@@ -14,9 +16,22 @@ export default function RegisterPartner() {
     whatsapp: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (!actor) return;
+
+    try {
+      await actor.saveCallerUserProfile({
+        name: formData.nama,
+        email: formData.email,
+        role: "partner",
+        isActive: false,
+      });
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (submitted) {

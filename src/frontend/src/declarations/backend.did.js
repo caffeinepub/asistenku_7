@@ -33,6 +33,10 @@ export const Ticket = IDL.Record({
   'description' : IDL.Text,
   'targetRole' : UserRole,
 });
+export const UserRow = IDL.Record({
+  'userId' : IDL.Principal,
+  'profile' : UserProfile,
+});
 export const WithdrawStatus = IDL.Variant({
   'pending' : IDL.Null,
   'approved' : IDL.Null,
@@ -48,6 +52,11 @@ export const WithdrawRequest = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'checkRoleAndStatus' : IDL.Func(
+      [],
+      [IDL.Record({ 'role' : IDL.Text, 'isActive' : IDL.Bool })],
+      ['query'],
+    ),
   'claimSuperadmin' : IDL.Func([], [IDL.Bool], []),
   'createTicket' : IDL.Func([IDL.Text, UserRole], [TicketId], []),
   'createWithdrawRequest' : IDL.Func([IDL.Nat], [IDL.Nat], []),
@@ -76,7 +85,9 @@ export const idlService = IDL.Service({
     ),
   'hasSuperadmin' : IDL.Func([], [IDL.Bool], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'isSuperadmin' : IDL.Func([], [IDL.Bool], ['query']),
   'listAllTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
+  'listAllUsers' : IDL.Func([], [IDL.Vec(UserRow)], ['query']),
   'listAllWithdrawRequests' : IDL.Func(
       [],
       [IDL.Vec(WithdrawRequest)],
@@ -94,6 +105,7 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'setUserActiveStatus' : IDL.Func([IDL.Principal, IDL.Bool], [IDL.Bool], []),
   'updateTicketStatus' : IDL.Func([TicketId, TicketStatus], [], []),
   'updateWithdrawStatus' : IDL.Func([IDL.Nat, WithdrawStatus], [], []),
 });
@@ -126,6 +138,10 @@ export const idlFactory = ({ IDL }) => {
     'description' : IDL.Text,
     'targetRole' : UserRole,
   });
+  const UserRow = IDL.Record({
+    'userId' : IDL.Principal,
+    'profile' : UserProfile,
+  });
   const WithdrawStatus = IDL.Variant({
     'pending' : IDL.Null,
     'approved' : IDL.Null,
@@ -141,6 +157,11 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'checkRoleAndStatus' : IDL.Func(
+        [],
+        [IDL.Record({ 'role' : IDL.Text, 'isActive' : IDL.Bool })],
+        ['query'],
+      ),
     'claimSuperadmin' : IDL.Func([], [IDL.Bool], []),
     'createTicket' : IDL.Func([IDL.Text, UserRole], [TicketId], []),
     'createWithdrawRequest' : IDL.Func([IDL.Nat], [IDL.Nat], []),
@@ -173,7 +194,9 @@ export const idlFactory = ({ IDL }) => {
       ),
     'hasSuperadmin' : IDL.Func([], [IDL.Bool], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'isSuperadmin' : IDL.Func([], [IDL.Bool], ['query']),
     'listAllTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
+    'listAllUsers' : IDL.Func([], [IDL.Vec(UserRow)], ['query']),
     'listAllWithdrawRequests' : IDL.Func(
         [],
         [IDL.Vec(WithdrawRequest)],
@@ -191,6 +214,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'setUserActiveStatus' : IDL.Func([IDL.Principal, IDL.Bool], [IDL.Bool], []),
     'updateTicketStatus' : IDL.Func([TicketId, TicketStatus], [], []),
     'updateWithdrawStatus' : IDL.Func([IDL.Nat, WithdrawStatus], [], []),
   });
