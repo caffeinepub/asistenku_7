@@ -1,84 +1,18 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T02:07:27.933Z",
+  "generatedAt": "2026-02-14T03:43:08.449Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
-    "implemented": 7,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-27",
-        "summary": "Edit only `frontend/src/components/asistenku/LandingPage.tsx` to implement the updated landing layout and behavior while keeping the rest of the app unchanged. Because the required changes affect Hero and pricing behavior but other files must not be edited, implement the updated Hero, the three new informational sections, and the new collapsed-by-default pricing (\"Fase Layanan\") section directly inside `LandingPage.tsx` (i.e., do not rely on `Hero` / `LayananSection` implementations that cannot be modified). Keep rendering the existing `Header`, `JoinTeamSection`, `Penutup`, and `Footer` components as-is.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-28",
-        "summary": "Update the Hero section content and layout within `LandingPage.tsx` with strict copy locking: keep the existing hero headline text exactly as currently displayed, and insert the following definition line immediately under the main hero headline and before the CTA area (exact string, no edits):\n\n\"Asistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\"",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-29",
-        "summary": "Resize the hero image within `LandingPage.tsx` (do not change the asset file) to reduce its dominance: on desktop, the image must be at most 40% of the hero container width; on mobile it should remain full width but not visually dominant (not full-bleed, not filling the viewport height). Keep the image centered and avoid a full-bleed presentation.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-30",
-        "summary": "Add a new section immediately after the Hero section in `LandingPage.tsx` titled exactly \"Bagaimana Kami Mendampingi\" and render the following lines exactly (no edits, no extra words), preserving line breaks as separate paragraphs or list items:\n\n\"Sampaikan kebutuhan Anda.\"\n\"Asistenmu menyusunnya menjadi brief yang jelas dan terstruktur.\"\n\"Partner yang tepat dipilih dan dikelola.\"\n\"Hasil diperiksa sebelum sampai ke Anda.\"\n\nThen, separated by a small vertical gap, render this closing line exactly:\n\n\"Anda tidak lagi mengelola orang dan proses. Anda hanya mengelola keputusan.\"",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-31",
-        "summary": "Add a new section immediately after \"Bagaimana Kami Mendampingi\" in `LandingPage.tsx` titled exactly \"Tepat Tanpa Kehilangan Waktu\" and render the following paragraph exactly (no edits, no extra words):\n\n\"Kami menjaga ketepatan. Dalam kebutuhan mendesak, struktur kami memungkinkan pekerjaan dijalankan secara paralel tanpa kehilangan kontrol.\"",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-32",
-        "summary": "Add a new section immediately after \"Tepat Tanpa Kehilangan Waktu\" in `LandingPage.tsx` for \"Unit Layanan\" messaging. In this section, include the following two sentences exactly (no edits):\n\n\"Konversi unit layanan tidak ditentukan secara sembarangan.\"\n\"Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.\"",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/asistenku/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-33",
-        "summary": "In `LandingPage.tsx`, implement a \"Fase Layanan (Pricing)\" card group with accordion behavior (collapsed by default) that meets these rules:\n\nCollapsed default state for every card:\n- Shows only: phase name, a short phase description, and a clear visual affordance that the card is clickable/expandable.\n- Must not show any price content while collapsed.\n- All cards must be collapsed by default.\n\nExpanded state:\n- When a card is expanded, show the following content in this exact order and exact strings (no edits):\n  1) Bold, single line: \"Rp 3.500.000 untuk alokasi 22 Unit Layanan\"\n  2) Smaller/secondary text: \"Untuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\"\n  3) A button labeled exactly: \"Hubungi Concierge Kami\"\n\nAnimation:\n- Accordion open/close animation must be smooth, within 200–300ms.\n\nStyle rules:\n- Do not include \"/bulan\" anywhere.\n- Do not include the words: \"upgrade\", \"top up\", any subscription wording, or any auto-calculation wording.\n- Price line must be bold; flexibility line must appear in a secondary (less prominent) color; the button uses the primary brand color.",
+        "id": "REQ-34",
+        "summary": "Update only `frontend/src/components/asistenku/LandingPage.tsx` to insert a new, titleless micro-authority block directly under the existing “Tepat Tanpa Kehilangan Waktu” section and before the existing “Unit Layanan” section, without removing or modifying any existing sections (including “Unit Layanan”) and without moving the “Fase Layanan (Pricing)” section.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/asistenku/LandingPage.tsx"

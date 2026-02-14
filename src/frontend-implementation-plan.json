@@ -1,121 +1,25 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "LandingPage.tsx-only landing updates: inline hero + new sections + collapsed pricing accordion",
+  "title": "Insert titleless micro-authority block on Asistenku landing page",
   "requirements": [
     {
-      "id": "REQ-27",
-      "summary": "Update landing layout by editing only LandingPage.tsx; inline the updated Hero and pricing behavior while keeping existing Header/JoinTeamSection/Penutup/Footer rendering unchanged.",
+      "id": "REQ-34",
+      "summary": "Insert a new titleless micro-authority block directly below the “Tepat Tanpa Kehilangan Waktu” section and before the existing “Unit Layanan” section, without changing any other landing page sections or their order.",
       "acceptanceCriteria": [
-        "The only modified file is `frontend/src/components/asistenku/LandingPage.tsx`.",
-        "No backend files are changed.",
-        "No routing files are changed.",
-        "Client/partner/internal login/register pages and their structure remain unchanged.",
-        "`LandingPage.tsx` continues to render `Header`, `JoinTeamSection`, `Penutup`, and `Footer` (can be via existing imports)."
+        "Only `frontend/src/components/asistenku/LandingPage.tsx` is modified.",
+        "The landing page section order is: “Tepat Tanpa Kehilangan Waktu” -> (new micro-authority block) -> existing “Unit Layanan” -> existing “Fase Layanan (Pricing)”.",
+        "The new block renders without any section title and without extra UI elements (no emoji, no divider, no card/box/shadow wrapper, no highlight).",
+        "The inserted JSX matches exactly the required structure and Tailwind classes (no additions/removals beyond what is necessary to place it in the page).",
+        "The new block text content matches exactly (including punctuation and JSX line breaks): “Struktur kami menjaga keseimbangan antara kualitas dan ketepatan.” and “Konversi unit layanan ditentukan melalui standar kerja yang terukur.” and “Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.”",
+        "The existing “Unit Layanan” section remains present and unchanged in copy and styling.",
+        "The existing “Fase Layanan (Pricing)” section is not moved and remains unchanged."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/asistenku/LandingPage.tsx",
           "operation": "modify",
-          "description": "Refactor LandingPage composition so Hero and pricing sections are implemented inline (do not render the existing `Hero` and `LayananSection` components), while continuing to render `Header`, `JoinTeamSection`, `Penutup`, and `Footer` as-is. Ensure the on-page anchor used by `Header` scroll (id=\"layanan\") remains present on the page."
-        }
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "summary": "Update inline Hero to keep the existing headline copy unchanged and insert the exact definition line directly below it and above CTAs.",
-      "acceptanceCriteria": [
-        "The new definition sentence appears directly below the hero headline and above the CTA buttons/links.",
-        "The definition sentence matches exactly: \"Asistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\"",
-        "No other existing hero copy is altered."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Implement the Hero section directly in `LandingPage.tsx`, preserving the current headline text exactly as displayed today (from the existing Hero) and inserting the exact definition sentence immediately under the headline and before the CTA area. Use the shadcn-ui `Button` component for the CTA button(s) if needed; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-29",
-      "summary": "Resize the existing hero image in LandingPage.tsx so it is visually secondary (<=40% width on desktop; contained and non-dominant on mobile) without changing the image asset.",
-      "acceptanceCriteria": [
-        "Hero image continues to use `/assets/heroimage.png` (no filename changes).",
-        "At desktop breakpoints, the rendered hero image width is constrained to <= 40% of the hero container width.",
-        "On small screens, the image can be full width within the content container but is not full-bleed edge-to-edge and does not dominate the viewport (reasonable max-height / spacing so text remains primary)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Adjust the inline Hero layout to use `/assets/heroimage.png` but constrain its desktop size to at most ~40% of the hero container width and keep it centered. On mobile, keep the image within the content container (not full-bleed) with a reasonable max-width/max-height so text remains the primary focus."
-        }
-      ]
-    },
-    {
-      "id": "REQ-30",
-      "summary": "Add the new 'Bagaimana Kami Mendampingi' section directly after Hero with strictly copy-locked lines and closing statement.",
-      "acceptanceCriteria": [
-        "A new section appears directly after the Hero section.",
-        "Section heading matches exactly: \"Bagaimana Kami Mendampingi\".",
-        "The four step lines render exactly as provided, in order, with no added text.",
-        "The closing line renders exactly as provided, separated by a small vertical gap from the steps."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Insert a new section immediately after the inline Hero titled exactly \"Bagaimana Kami Mendampingi\" and render the four provided lines as separate paragraphs or list items in the same order, followed by a small vertical gap and the exact closing line, with no copy changes."
-        }
-      ]
-    },
-    {
-      "id": "REQ-31",
-      "summary": "Add the 'Tepat Tanpa Kehilangan Waktu' section immediately after the previous section with strictly copy-locked paragraph text.",
-      "acceptanceCriteria": [
-        "A new section appears after the Cara Kerja section.",
-        "Section heading matches exactly: \"Tepat Tanpa Kehilangan Waktu\".",
-        "The paragraph matches exactly as provided, with no additional copy."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Add a new section immediately after \"Bagaimana Kami Mendampingi\" titled exactly \"Tepat Tanpa Kehilangan Waktu\" and render the provided paragraph verbatim with no extra words."
-        }
-      ]
-    },
-    {
-      "id": "REQ-32",
-      "summary": "Add the 'Unit Layanan' messaging section immediately after 'Tepat Tanpa Kehilangan Waktu' with the two strictly copy-locked sentences.",
-      "acceptanceCriteria": [
-        "A new section appears after the Ketepatan & Paralel section.",
-        "The two sentences appear exactly as provided, in order, with no extra text added."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Add a new section immediately after \"Tepat Tanpa Kehilangan Waktu\" and render the two specified sentences verbatim (in order) with no additional copy."
-        }
-      ]
-    },
-    {
-      "id": "REQ-33",
-      "summary": "Implement the 'Fase Layanan (Pricing)' accordion card group in LandingPage.tsx with all cards collapsed by default, strict expanded content, and smooth 200–300ms animation while avoiding disallowed wording.",
-      "acceptanceCriteria": [
-        "A pricing/fase-layanan section exists on the landing page and renders its cards with collapsed-by-default behavior.",
-        "In collapsed state, no price text is visible anywhere in the card.",
-        "Expanding a card reveals exactly these three elements in order with exact strings:\n1) \"Rp 3.500.000 untuk alokasi 22 Unit Layanan\" (bold)\n2) \"Untuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\" (smaller/secondary)\n3) Button text: \"Hubungi Concierge Kami\"",
-        "Open/close animation is smooth and lasts ~200–300ms.",
-        "The landing page contains no occurrences of the string \"/bulan\" and does not introduce the words \"upgrade\" or \"top up\" or subscription/auto-calculation phrasing."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Implement an inline \"Fase Layanan (Pricing)\" section (attach id=\"layanan\" here to preserve existing Header scroll behavior) containing a group of clickable cards with accordion behavior: all collapsed by default; collapsed cards show only phase name + short description + clear affordance; expanded card reveals exactly the three specified elements in the exact order and copy, with a smooth 200–300ms open/close animation. Ensure no \"/bulan\" string or disallowed words (\"upgrade\", \"top up\", subscription/auto-calculation wording) are introduced. Use the shadcn-ui `Button` component for the \"Hubungi Concierge Kami\" button and style it with the primary brand color; verify the component's usage instructions before implementing."
+          "description": "Insert the specified titleless micro-authority <section className=\"py-8\"> block immediately after the existing “Tepat Tanpa Kehilangan Waktu” section and immediately before the existing “Unit Layanan” section. Keep all existing sections (including “Unit Layanan”) unchanged and keep the “Fase Layanan (Pricing)” section in its current position; do not alter any other copy, links, IDs, ordering, or styling outside inserting this exact block."
         }
       ]
     }

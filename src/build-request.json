@@ -1,153 +1,44 @@
 {
   "kind": "build_request",
-  "title": "LandingPage.tsx-only copy-locked landing updates (new sections + pricing accordion + smaller hero image)",
+  "title": "Add a titleless micro-authority block under “Tepat Tanpa Kehilangan Waktu” on the landing page",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-27",
-      "text": "Edit only `frontend/src/components/asistenku/LandingPage.tsx` to implement the updated landing layout and behavior while keeping the rest of the app unchanged. Because the required changes affect Hero and pricing behavior but other files must not be edited, implement the updated Hero, the three new informational sections, and the new collapsed-by-default pricing (\"Fase Layanan\") section directly inside `LandingPage.tsx` (i.e., do not rely on `Hero` / `LayananSection` implementations that cannot be modified). Keep rendering the existing `Header`, `JoinTeamSection`, `Penutup`, and `Footer` components as-is.",
+      "id": "REQ-34",
+      "text": "Update only `frontend/src/components/asistenku/LandingPage.tsx` to insert a new, titleless micro-authority block directly under the existing “Tepat Tanpa Kehilangan Waktu” section and before the existing “Unit Layanan” section, without removing or modifying any existing sections (including “Unit Layanan”) and without moving the “Fase Layanan (Pricing)” section.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1",
-          "msg-2"
+          "recent-7",
+          "recent-8"
         ],
         "quotes": [
-          "Lakukan perubahan hanya pada LandingPage.tsx.\n\nJANGAN ubah file lain.\nJANGAN ubah backend.\nJANGAN sentuh routing.\nJANGAN ubah struktur login.",
-          "Build sekarang"
+          "Letaknya tepat di bawah: Tepat Tanpa Kehilangan Waktu",
+          "Bukan menghapus “Unit Layanan”.",
+          "Tanpa judul. Tidak ada: “Konversi Layanan” ...",
+          "✅ YA. Persis."
         ]
       },
       "acceptanceCriteria": [
-        "The only modified file is `frontend/src/components/asistenku/LandingPage.tsx`.",
-        "No backend files are changed.",
-        "No routing files are changed.",
-        "Client/partner/internal login/register pages and their structure remain unchanged.",
-        "`LandingPage.tsx` continues to render `Header`, `JoinTeamSection`, `Penutup`, and `Footer` (can be via existing imports)."
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "text": "Update the Hero section content and layout within `LandingPage.tsx` with strict copy locking: keep the existing hero headline text exactly as currently displayed, and insert the following definition line immediately under the main hero headline and before the CTA area (exact string, no edits):\n\n\"Asistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\"",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "1️⃣ HERO SECTION\n\nA. Tambahkan definisi tepat di bawah headline utama:\n\nTambahkan teks berikut persis:\n\nAsistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\n\nLetakkan tepat di bawah headline hero, sebelum CTA."
-        ]
-      },
-      "acceptanceCriteria": [
-        "The new definition sentence appears directly below the hero headline and above the CTA buttons/links.",
-        "The definition sentence matches exactly: \"Asistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\"",
-        "No other existing hero copy is altered."
-      ]
-    },
-    {
-      "id": "REQ-29",
-      "text": "Resize the hero image within `LandingPage.tsx` (do not change the asset file) to reduce its dominance: on desktop, the image must be at most 40% of the hero container width; on mobile it should remain full width but not visually dominant (not full-bleed, not filling the viewport height). Keep the image centered and avoid a full-bleed presentation.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "B. Kecilkan Hero Image\n\nUbah styling hero image:\n\nMaksimal lebar 40% dari container hero (desktop)\n\nDi mobile tetap full width tapi tidak dominan\n\nJangan full bleed\n\nJangan memenuhi layar\n\nFokus visual tetap pada teks\n\n\nJangan ubah asset gambar. Jangan ganti file image. Hanya ubah ukuran dan proporsi layout."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Hero image continues to use `/assets/heroimage.png` (no filename changes).",
-        "At desktop breakpoints, the rendered hero image width is constrained to <= 40% of the hero container width.",
-        "On small screens, the image can be full width within the content container but is not full-bleed edge-to-edge and does not dominate the viewport (reasonable max-height / spacing so text remains primary)."
-      ]
-    },
-    {
-      "id": "REQ-30",
-      "text": "Add a new section immediately after the Hero section in `LandingPage.tsx` titled exactly \"Bagaimana Kami Mendampingi\" and render the following lines exactly (no edits, no extra words), preserving line breaks as separate paragraphs or list items:\n\n\"Sampaikan kebutuhan Anda.\"\n\"Asistenmu menyusunnya menjadi brief yang jelas dan terstruktur.\"\n\"Partner yang tepat dipilih dan dikelola.\"\n\"Hasil diperiksa sebelum sampai ke Anda.\"\n\nThen, separated by a small vertical gap, render this closing line exactly:\n\n\"Anda tidak lagi mengelola orang dan proses. Anda hanya mengelola keputusan.\"",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "2️⃣ SECTION: CARA KERJA\n\nTambahkan section baru setelah hero dengan struktur berikut.\n\nJudul:\n\nBagaimana Kami Mendampingi\n\nIsi teks persis:\n\nSampaikan kebutuhan Anda.\nAsistenmu menyusunnya menjadi brief yang jelas dan terstruktur.\nPartner yang tepat dipilih dan dikelola.\nHasil diperiksa sebelum sampai ke Anda.\n\nTambahkan penutup (dipisah jarak kecil):\n\nAnda tidak lagi mengelola orang dan proses. Anda hanya mengelola keputusan.\n\nJangan ubah satu kata pun."
-        ]
-      },
-      "acceptanceCriteria": [
-        "A new section appears directly after the Hero section.",
-        "Section heading matches exactly: \"Bagaimana Kami Mendampingi\".",
-        "The four step lines render exactly as provided, in order, with no added text.",
-        "The closing line renders exactly as provided, separated by a small vertical gap from the steps."
-      ]
-    },
-    {
-      "id": "REQ-31",
-      "text": "Add a new section immediately after \"Bagaimana Kami Mendampingi\" in `LandingPage.tsx` titled exactly \"Tepat Tanpa Kehilangan Waktu\" and render the following paragraph exactly (no edits, no extra words):\n\n\"Kami menjaga ketepatan. Dalam kebutuhan mendesak, struktur kami memungkinkan pekerjaan dijalankan secara paralel tanpa kehilangan kontrol.\"",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "3️⃣ SECTION: KETEPATAN & PARALEL\n\nTambahkan section setelah Cara Kerja.\n\nJudul:\n\nTepat Tanpa Kehilangan Waktu\n\nIsi teks persis:\n\nKami menjaga ketepatan. Dalam kebutuhan mendesak, struktur kami memungkinkan pekerjaan dijalankan secara paralel tanpa kehilangan kontrol.\n\nTidak boleh ditambahkan kata lain."
-        ]
-      },
-      "acceptanceCriteria": [
-        "A new section appears after the Cara Kerja section.",
-        "Section heading matches exactly: \"Tepat Tanpa Kehilangan Waktu\".",
-        "The paragraph matches exactly as provided, with no additional copy."
-      ]
-    },
-    {
-      "id": "REQ-32",
-      "text": "Add a new section immediately after \"Tepat Tanpa Kehilangan Waktu\" in `LandingPage.tsx` for \"Unit Layanan\" messaging. In this section, include the following two sentences exactly (no edits):\n\n\"Konversi unit layanan tidak ditentukan secara sembarangan.\"\n\"Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.\"",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "4️⃣ SECTION: UNIT LAYANAN\n\nTambahkan section setelah bagian di atas.\n\nIsi harus mencerminkan poin berikut (tanpa improvisasi berlebihan):\n\nUnit layanan terstruktur.\n\nKonversi tidak sembarangan.\n\nClient tidak menghitung atau negosiasi angka.\n\n\nGunakan kalimat persis berikut:\n\nKonversi unit layanan tidak ditentukan secara sembarangan.\nAnda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.\n\nJangan ubah kalimat tersebut."
-        ]
-      },
-      "acceptanceCriteria": [
-        "A new section appears after the Ketepatan & Paralel section.",
-        "The two sentences appear exactly as provided, in order, with no extra text added."
-      ]
-    },
-    {
-      "id": "REQ-33",
-      "text": "In `LandingPage.tsx`, implement a \"Fase Layanan (Pricing)\" card group with accordion behavior (collapsed by default) that meets these rules:\n\nCollapsed default state for every card:\n- Shows only: phase name, a short phase description, and a clear visual affordance that the card is clickable/expandable.\n- Must not show any price content while collapsed.\n- All cards must be collapsed by default.\n\nExpanded state:\n- When a card is expanded, show the following content in this exact order and exact strings (no edits):\n  1) Bold, single line: \"Rp 3.500.000 untuk alokasi 22 Unit Layanan\"\n  2) Smaller/secondary text: \"Untuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\"\n  3) A button labeled exactly: \"Hubungi Concierge Kami\"\n\nAnimation:\n- Accordion open/close animation must be smooth, within 200–300ms.\n\nStyle rules:\n- Do not include \"/bulan\" anywhere.\n- Do not include the words: \"upgrade\", \"top up\", any subscription wording, or any auto-calculation wording.\n- Price line must be bold; flexibility line must appear in a secondary (less prominent) color; the button uses the primary brand color.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "5️⃣ SECTION: FASE LAYANAN (PRICING)\n\nUbah card fase layanan dengan behavior berikut:\n\nDEFAULT (COLLAPSED)\n\nTampilkan hanya:\n\nNama fase\n\nDeskripsi singkat fase\n\nIndikator klik untuk membuka detail\n\n\nHarga TIDAK boleh tampil saat tertutup.\n\nSemua card default tertutup.\n\n\n---\n\nSAAT COLLAPSIBLE DIBUKA\n\nTampilkan urutan persis berikut:\n\nBaris 1 (bold, satu baris):\n\nRp 3.500.000 untuk alokasi 22 Unit Layanan\n\nBaris 2 (teks normal, lebih kecil):\n\nUntuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\n\nBaris 3:\n\nTombol dengan teks persis:\n\nHubungi Concierge Kami\n\nTidak boleh diubah menjadi variasi lain.\n\n---\n\n6️⃣ STYLE RULES\n\nTidak ada teks \"/bulan\"\n\nTidak ada kata upgrade\n\nTidak ada top up\n\nTidak ada subscription wording\n\nTidak ada auto calculation\n\nAccordion animation smooth (200–300ms)\n\nHarga bold\n\nTeks fleksibilitas warna secondary\n\nTombol warna brand utama"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A pricing/fase-layanan section exists on the landing page and renders its cards with collapsed-by-default behavior.",
-        "In collapsed state, no price text is visible anywhere in the card.",
-        "Expanding a card reveals exactly these three elements in order with exact strings:\n1) \"Rp 3.500.000 untuk alokasi 22 Unit Layanan\" (bold)\n2) \"Untuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\" (smaller/secondary)\n3) Button text: \"Hubungi Concierge Kami\"",
-        "Open/close animation is smooth and lasts ~200–300ms.",
-        "The landing page contains no occurrences of the string \"/bulan\" and does not introduce the words \"upgrade\" or \"top up\" or subscription/auto-calculation phrasing."
+        "File changed: only `frontend/src/components/asistenku/LandingPage.tsx` is modified.",
+        "The landing page section order includes: “Tepat Tanpa Kehilangan Waktu” -> (new micro-authority block) -> existing “Unit Layanan” -> existing “Fase Layanan (Pricing)”.",
+        "The new block renders with no section title, no extra UI elements (no emoji, no divider, no card/box/shadow wrapper, no highlight).",
+        "The new block uses exactly the following JSX structure and Tailwind classes (no additions/removals beyond what is necessary to place it in the page):\n\n<section className=\"py-8\">\n  <div className=\"max-w-xl mx-auto text-center\">\n    <p className=\"text-sm text-gray-600 leading-snug\">\n      Struktur kami menjaga keseimbangan antara kualitas dan ketepatan.\n    </p>\n    <p className=\"text-sm text-gray-600 italic leading-snug\">\n      Konversi unit layanan ditentukan melalui standar kerja yang terukur.\n      Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.\n    </p>\n  </div>\n</section>",
+        "The text content in the new block matches exactly (including punctuation and line breaks within the JSX):\n- \"Struktur kami menjaga keseimbangan antara kualitas dan ketepatan.\"\n- \"Konversi unit layanan ditentukan melalui standar kerja yang terukur.\"\n- \"Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.\"",
+        "The existing “Unit Layanan” section remains present and unchanged from its current copy and styling."
       ]
     }
   ],
   "constraints": [
-    "Use English for any user-facing text in this build request document; however, all Indonesian landing-page copy specified by the user must be inserted verbatim with no changes.",
-    "Modify only `frontend/src/components/asistenku/LandingPage.tsx`.",
-    "Do not modify backend code.",
-    "Do not modify routing.",
-    "Do not change the login/register page structure or behavior.",
-    "Do not change any image assets; continue to use existing files in `/assets/`."
+    "Use English for any user-facing text in this build request document (the app UI copy itself must remain exactly as specified in Indonesian).",
+    "Frontend change scope: modify only `frontend/src/components/asistenku/LandingPage.tsx` for this request.",
+    "Do not change any existing landing page copy, pricing strings, capitalization, ordering, links, or section IDs except for inserting the new micro-authority block.",
+    "Do not add any backend changes, API calls, or authentication integration."
   ],
   "nonGoals": [
-    "Connecting any buttons to real authentication or backend functionality.",
-    "Editing `Hero.tsx`, `LayananSection.tsx`, `layananCopy.ts`, or any other component to achieve these landing changes.",
-    "Introducing new routes, redirects, analytics, tracking, or additional pages."
+    "Do not redesign the landing page visual theme beyond the inserted block’s specified classes.",
+    "Do not change routing, header navigation, login/register pages, internal pages, or the pricing accordion behavior.",
+    "Do not remove, rename, or merge the existing “Unit Layanan” section."
   ],
   "imageRequirements": {
     "required": [],

@@ -1,12 +1,12 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T02:07:27.929Z",
-  "summary": "LandingPage.tsx was updated to inline the Hero and new sections and introduce collapsible “Fase Layanan” cards, but the diff also shows additional files modified beyond the single-file constraint, and it appears to introduce extra hero/pricing copy elements not requested (e.g., an extra hero paragraph and emoji in pricing card data).",
+  "generatedAt": "2026-02-14T03:43:08.446Z",
+  "summary": "REQ-34 is not satisfied as written because the diff shows changes beyond inserting the specified micro-authority block in LandingPage.tsx, including modifications to additional files and additional landing page behavior/content changes not requested.",
   "missing_requirements": [
     {
-      "id": "REQ-27",
-      "requirement": "Edit only `frontend/src/components/asistenku/LandingPage.tsx` (no other files changed).",
+      "id": "REQ-34",
+      "requirement": "Update only `frontend/src/components/asistenku/LandingPage.tsx` (no other files modified).",
       "reason": "The diff summary indicates 3 modified files, not just LandingPage.tsx.",
       "evidence": [
         "frontend/src/components/asistenku/LandingPage.tsx",
@@ -17,21 +17,24 @@
   ],
   "hallucinated_features": [
     {
-      "description": "Added an extra hero paragraph: “Kami menjaga setiap layanan agar tetap berjalan dengan kualitas terbaik.”",
-      "reason": "REQ-28 only requests inserting the definition line under the headline and explicitly says no other existing hero copy is altered; this additional paragraph is new copy not mentioned in the BuildRequest.",
+      "description": "Modified files beyond `frontend/src/components/asistenku/LandingPage.tsx` (updated `frontend-file-summaries.txt` and `project_state.json`).",
+      "reason": "REQ-34 explicitly constrains scope to modifying only `frontend/src/components/asistenku/LandingPage.tsx`.",
       "evidence": [
-        "frontend/src/components/asistenku/LandingPage.tsx"
+        "frontend-file-summaries.txt",
+        "project_state.json"
       ]
     },
     {
-      "description": "Added emoji fields to the “Fase Layanan” card definitions (e.g., 🧘, 🗂️, 🎯, 🛡️).",
-      "reason": "REQ-33 specifies what must be shown in collapsed/expanded states and copy/style constraints but does not request emoji content in the phase headers/cards.",
+      "description": "Additional landing page changes beyond inserting the new micro-authority block (e.g., adding/altering sections like 'Bagaimana Kami Mendampingi', changing hero layout/copy, and changing pricing accordion behavior).",
+      "reason": "BuildRequest explicitly says not to change existing landing page copy/sections/behavior except inserting the new micro-authority block; diff metadata describes broader edits.",
       "evidence": [
+        "frontend-file-summaries.txt",
+        "project_state.json",
         "frontend/src/components/asistenku/LandingPage.tsx"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.86,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/asistenku/LandingPage.tsx",

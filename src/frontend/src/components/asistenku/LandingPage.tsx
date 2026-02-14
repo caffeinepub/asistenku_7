@@ -139,6 +139,19 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Micro-authority block - Konversi */}
+      <section className="py-8">
+        <div className="max-w-xl mx-auto text-center">
+          <p className="text-sm text-gray-600 leading-snug">
+            Struktur kami menjaga keseimbangan antara kualitas dan ketepatan.
+          </p>
+          <p className="text-sm text-gray-600 italic leading-snug">
+            Konversi unit layanan ditentukan melalui standar kerja yang terukur.
+            Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.
+          </p>
+        </div>
+      </section>
+
       {/* Unit Layanan Section */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-6">

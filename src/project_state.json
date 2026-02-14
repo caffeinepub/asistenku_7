@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 11,
-  "summary": "Update Asistenku landing page by making precise, copy-locked changes only within LandingPage.tsx: add a new hero definition line under the main headline, resize the hero image to be less dominant (max 40% desktop, full-width but not dominant on mobile), add three new sections (Bagaimana Kami Mendampingi, Tepat Tanpa Kehilangan Waktu, Unit Layanan) with exact provided text, and update the Fase Layanan (pricing) cards to be collapsed-by-default with smooth accordion animation and show the exact pricing block + 'Hubungi Concierge Kami' button only when expanded; no backend, routing, or login structure changes.",
+  "projectStateVersion": 13,
+  "summary": "Update Asistenku landing page by making precise, copy-locked changes only within LandingPage.tsx: add a new hero definition line under the main headline, resize the hero image to be less dominant (max 40% desktop, full-width but not dominant on mobile), add sections with exact provided text (Bagaimana Kami Mendampingi, Tepat Tanpa Kehilangan Waktu, Unit Layanan), insert an additional titleless micro-authority block directly under 'Tepat Tanpa Kehilangan Waktu' using the exact provided JSX/copy/styling (centered max-w-xl, text-sm gray-600, leading-snug, second paragraph italic, minimal spacing), and update the Fase Layanan (pricing) cards to be collapsed-by-default with smooth accordion animation and show the exact pricing block + 'Hubungi Concierge Kami' button only when expanded; no backend, routing, or login structure changes.",
   "architectural_notes": [
     "Strict content lock: do not change any provided text, prices, capitalization, or order; do not add/remove copy except where explicitly instructed.",
     "Use provided assets (heroimage.png, asistenku-horizontal.png, asistenku-icon.png) and WhatsApp link https://wa.me/628817743613.",
@@ -16,7 +16,8 @@
   ],
   "known_issues": [
     "Build/generation hit an internal configuration error (Caffeine) during initial attempt; user requested to try again.",
-    "Preview sometimes hangs or shows a blank white page due to unstable/duplicated frontend routing setup in App.tsx; needs stabilization."
+    "Preview sometimes hangs or shows a blank white page due to unstable/duplicated frontend routing setup in App.tsx; needs stabilization.",
+    "Placement ambiguity: user wants the new micro-authority block directly under 'Tepat Tanpa Kehilangan Waktu' and also explicitly says not to remove 'Unit Layanan', but their final listed section order omits 'Unit Layanan'; confirm final placement of 'Unit Layanan' relative to the new micro-authority block and Fase Layanan."
   ],
   "isFixRequest": false,
   "existing_features": [
@@ -283,6 +284,14 @@
         "REQ-33"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-only-frontend-src-components-asistenku-landingpage-tsx-to-insert-a-new-titleless-micro-authority-block-directly-under-the-existing-tepat-tanpa-kehilangan-waktu-section-and-before-the-existing-unit-layanan-section-without-removing-or-modifying-any-existing-sections-including-unit-layanan-and-without-moving-the-fase-layanan-pricing-section",
+      "title": "Update only `frontend/src/components/asistenku/LandingPage.tsx` to insert a new, titleless micro-authority block directly under the existing “Tepat Tanpa Kehilangan Waktu” section and before the existing “Unit Layanan” section, without removing or modifying any existing sections (including “Unit Layanan”) and without moving the “Fase Layanan (Pricing)” section.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -307,6 +316,12 @@
     {
       "id": "AR-4",
       "summary": "LandingPage.tsx-only update with strict no-improvisation copy: add hero definition line under headline; resize hero image (<=40% container on desktop; mobile full width but not dominant); add new sections 'Bagaimana Kami Mendampingi' (exact step text + closing line), 'Tepat Tanpa Kehilangan Waktu' (exact paragraph), 'Unit Layanan' (exact 2 sentences); update Fase Layanan pricing cards to be collapsed by default (no price visible), smooth accordion (200–300ms), expanded state shows exact 3-row pricing block (bold price line, secondary flexibility text) and a button labeled exactly 'Hubungi Concierge Kami'; enforce wording bans (/bulan, upgrade, top up, subscription, auto calculation); do not touch any other files, routing, backend, or login structure.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add a titleless micro-authority block directly below the 'Tepat Tanpa Kehilangan Waktu' section in LandingPage.tsx, using the exact provided copy and JSX (2 paragraphs, second italic) and styling rules (py-8, max-w-xl, mx-auto, text-center, text-sm, text-gray-600, leading-snug, minimal paragraph spacing), as a subtle reassurance (not a selling section) and without removing other sections (including Unit Layanan) or moving pricing.",
       "reqIds": [],
       "status": "pending"
     }
