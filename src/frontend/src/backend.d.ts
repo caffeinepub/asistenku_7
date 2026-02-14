@@ -45,6 +45,7 @@ export enum WithdrawStatus {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    claimSuperadmin(): Promise<boolean>;
     createTicket(description: string, targetRole: UserRole): Promise<TicketId>;
     createWithdrawRequest(amount: bigint): Promise<bigint>;
     getCallerUserProfile(): Promise<UserProfile | null>;
@@ -58,7 +59,9 @@ export interface backendInterface {
         totalWithdrawPending: bigint;
         totalLayanan: bigint;
     }>;
+    getSuperadminPrincipal(): Promise<Principal | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    hasSuperadmin(): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
     listAllTickets(): Promise<Array<Ticket>>;
     listAllWithdrawRequests(): Promise<Array<WithdrawRequest>>;

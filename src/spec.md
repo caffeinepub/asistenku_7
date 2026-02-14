@@ -1,11 +1,18 @@
 # Specification
 
 ## Summary
-**Goal:** Enable a one-time superadmin claim flow by wiring new backend methods to a “Claim Superadmin” block on the Internal Login page, using the existing Internet Identity login flow.
+**Goal:** Register existing internal dashboard pages as new TanStack Router routes in `frontend/src/App.tsx` without changing any existing routing code.
 
 **Planned changes:**
-- Add/ensure `hasSuperadmin()` and `claimSuperadmin()` methods exist in `backend/main.mo` with the exact required signatures and behaviors (first caller claims; idempotent for current superadmin; reject others).
-- Update `frontend/src/pages/internal/InternalLogin.tsx` to query `hasSuperadmin()` on load, show a loading indicator while unknown, and conditionally render a “Claim Superadmin” card only when no superadmin exists; require Internet Identity login before allowing the claim; show backend error messages on failure; avoid the word “service/Service” in page text.
-- Update exactly one frontend actor/binding helper file (e.g., `frontend/src/hooks/useActor.ts`) so the Internal Login page can call `hasSuperadmin()` and `claimSuperadmin()` after Internet Identity login, without any global refactors or routing changes.
+- In `frontend/src/App.tsx`, add missing imports for the existing dashboard page components (only if not already imported).
+- Add new `createRoute({ ... })` route constants for the 7 dashboard paths:
+  - `/superadmin/dashboard` -> `SuperadminDashboard`
+  - `/admin/dashboard` -> `AdminDashboard`
+  - `/asistenmu/dashboard` -> `AsistenmuDashboard`
+  - `/concierge/dashboard` -> `ConciergeDashboard`
+  - `/strategicpartner/dashboard` -> `StrategicPartnerDashboard`
+  - `/management/dashboard` -> `ManagementDashboard`
+  - `/finance/dashboard` -> `FinanceDashboard`
+- Append the new route constants into `routeTree = rootRoute.addChildren([ ... ])` without removing or modifying existing entries.
 
-**User-visible outcome:** On `/internal/login`, users can log in with Internet Identity and (only if no superadmin exists yet) claim superadmin once; after a successful claim the card disappears, and failed claims display the backend message.
+**User-visible outcome:** Visiting each of the 7 new dashboard URLs renders the correct existing dashboard page instead of the 404 page, with all existing routes continuing to work unchanged.

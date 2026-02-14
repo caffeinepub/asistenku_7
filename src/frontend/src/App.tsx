@@ -6,6 +6,13 @@ import LoginPartner from './pages/partner/LoginPartner';
 import RegisterPartner from './pages/partner/RegisterPartner';
 import InternalLogin from './pages/internal/InternalLogin';
 import InternalRegister from './pages/internal/InternalRegister';
+import SuperadminDashboard from './pages/superadmin/SuperadminDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AsistenmuDashboard from './pages/asistenmu/AsistenmuDashboard';
+import ConciergeDashboard from './pages/concierge/ConciergeDashboard';
+import StrategicPartnerDashboard from './pages/strategicpartner/StrategicPartnerDashboard';
+import ManagementDashboard from './pages/management/ManagementDashboard';
+import FinanceDashboard from './pages/finance/FinanceDashboard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
@@ -79,6 +86,48 @@ const internalRegisterRoute = createRoute({
   component: InternalRegister,
 });
 
+const superadminDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/superadmin/dashboard',
+  component: SuperadminDashboard,
+});
+
+const adminDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin/dashboard',
+  component: AdminDashboard,
+});
+
+const asistenmuDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/asistenmu/dashboard',
+  component: AsistenmuDashboard,
+});
+
+const conciergeDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/concierge/dashboard',
+  component: ConciergeDashboard,
+});
+
+const strategicpartnerDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/strategicpartner/dashboard',
+  component: StrategicPartnerDashboard,
+});
+
+const managementDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/management/dashboard',
+  component: ManagementDashboard,
+});
+
+const financeDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/finance/dashboard',
+  component: FinanceDashboard,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   clientLoginRoute,
@@ -87,6 +136,13 @@ const routeTree = rootRoute.addChildren([
   partnerRegisterRoute,
   internalLoginRoute,
   internalRegisterRoute,
+  superadminDashboardRoute,
+  adminDashboardRoute,
+  asistenmuDashboardRoute,
+  conciergeDashboardRoute,
+  strategicpartnerDashboardRoute,
+  managementDashboardRoute,
+  financeDashboardRoute,
 ]);
 
 const router = createRouter({ routeTree });

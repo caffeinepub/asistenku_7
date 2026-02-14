@@ -43,6 +43,7 @@ export type WithdrawStatus = { 'pending' : null } |
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'claimSuperadmin' : ActorMethod<[], boolean>,
   'createTicket' : ActorMethod<[string, UserRole], TicketId>,
   'createWithdrawRequest' : ActorMethod<[bigint], bigint>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
@@ -59,7 +60,9 @@ export interface _SERVICE {
       'totalLayanan' : bigint,
     }
   >,
+  'getSuperadminPrincipal' : ActorMethod<[], [] | [Principal]>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'hasSuperadmin' : ActorMethod<[], boolean>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'listAllTickets' : ActorMethod<[], Array<Ticket>>,
   'listAllWithdrawRequests' : ActorMethod<[], Array<WithdrawRequest>>,

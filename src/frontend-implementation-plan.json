@@ -1,40 +1,38 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Wire Superadmin Claim UI into Internal Login (frontend-only, strict file scope)",
+  "title": "Register internal dashboard routes in frontend/src/App.tsx (no refactors)",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Add a \"Claim Superadmin\" card to Internal Login that loads `hasSuperadmin`, requires Internet Identity login before claiming, and calls `claimSuperadmin` with proper success/error handling (no \"service\" wording).",
+      "id": "REQ-1",
+      "summary": "Register new TanStack Router routes for existing dashboard pages in App.tsx by adding only missing imports, new createRoute constants, and appending them to routeTree children—without altering existing router setup.",
       "acceptanceCriteria": [
-        "When visiting `/internal/login` while no superadmin exists, after Internet Identity login completes, the \"Claim Superadmin\" card is visible and enabled.",
-        "Clicking \"Claim Superadmin\" successfully claims and then the card disappears without navigating away from `/internal/login`.",
-        "When a superadmin already exists, the \"Claim Superadmin\" card never renders.",
-        "On a failed claim attempt, the UI surfaces the exact `message` returned by the backend.",
-        "No new usage of the word \"service\"/\"Service\" appears in the Internal Login page UI text.",
-        "Existing role cards (Admin, Asistenmu, Concierge, Strategic Partner, Manajer, Finance, Management) and their existing behavior remain unchanged aside from positioning due to the new card."
+        "Only `frontend/src/App.tsx` is changed; no other files are modified.",
+        "Existing imports, routes, and router setup remain unchanged except for adding necessary imports and new route definitions.",
+        "New routes are added only as additional `createRoute` constants and included in the `routeTree` children array (appended without removing existing entries) (no router refactor)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/internal/InternalLogin.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Integrate Internet Identity authentication state and the backend actor to (1) call `actor.hasSuperadmin()` on page load and keep `hasSuperadmin: boolean | null` with a small loading indicator when null, (2) conditionally render a top-of-grid card titled \"Claim Superadmin\" with the specified description and button only when `hasSuperadmin === false`, (3) require Internet Identity login before enabling the claim button, (4) on click call `actor.claimSuperadmin()`, then refresh `hasSuperadmin` on success and show the exact backend `message` on failure, (5) ensure no UI copy uses the word \"service\"/\"Service\", and keep existing role card behaviors intact. Use shadcn-ui Card/Button components already used on the page to keep styling consistent; Verify the component's usage instructions before implementing."
+          "description": "Add missing imports for the existing dashboard page components (only if not already imported), define new `createRoute({ ... })` constants for the dashboard paths, and append the new route variables to the existing `routeTree = rootRoute.addChildren([ ... ])` array without changing/removing any existing routes or structure."
         }
       ]
     },
     {
-      "id": "REQ-3",
-      "summary": "Update the existing actor binding hook so the Internal Login page can safely call `hasSuperadmin()` and `claimSuperadmin()` after Internet Identity login without refactors or routing changes.",
+      "id": "REQ-2",
+      "summary": "Add 7 exact-path routes mapping to the corresponding existing dashboard components, ensuring they render instead of the 404 page.",
       "acceptanceCriteria": [
-        "Internal Login can obtain a non-null actor after Internet Identity login and successfully call `hasSuperadmin()` and `claimSuperadmin()` through the existing actor creation flow.",
-        "No other pages/components are modified and there is no routing change beyond relying on the existing `/internal/login` route.",
-        "Changes are confined to the allowed single helper binding file and do not introduce app-wide refactors."
+        "Navigating to each of the 7 listed paths renders the corresponding existing dashboard component instead of the 404 page.",
+        "The route `path` strings match exactly the requested paths (including leading slashes and spelling).",
+        "No new dashboard components are created and no existing dashboard files are edited.",
+        "All new route constants are included in the `routeTree` children array (appended without removing existing entries)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useActor.ts",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Extend the hook’s TypeScript typing (within this file only) so the returned `actor` type includes `hasSuperadmin(): Promise<boolean>` and `claimSuperadmin(): Promise<{ ok: boolean; message: string }>` as a safe superset of the existing `backendInterface`, without changing the actor creation flow or routing and without global refactors. Ensure Internal Login can call these methods after Internet Identity login via the existing identity-driven actor recreation."
+          "description": "Register these routes (exact `path` strings) using new `createRoute` constants that point to the default exports from the specified files, and append them to `rootRoute.addChildren([ ... ])`: `/superadmin/dashboard` -> `SuperadminDashboard` from `frontend/src/pages/superadmin/SuperadminDashboard.tsx`; `/admin/dashboard` -> `AdminDashboard` from `frontend/src/pages/admin/AdminDashboard.tsx`; `/asistenmu/dashboard` -> `AsistenmuDashboard` from `frontend/src/pages/asistenmu/AsistenmuDashboard.tsx`; `/concierge/dashboard` -> `ConciergeDashboard` from `frontend/src/pages/concierge/ConciergeDashboard.tsx`; `/strategicpartner/dashboard` -> `StrategicPartnerDashboard` from `frontend/src/pages/strategicpartner/StrategicPartnerDashboard.tsx`; `/management/dashboard` -> `ManagementDashboard` from `frontend/src/pages/management/ManagementDashboard.tsx`; `/finance/dashboard` -> `FinanceDashboard` from `frontend/src/pages/finance/FinanceDashboard.tsx`. If any of these components are already imported, do not modify that import; only add missing import lines."
         }
       ]
     }

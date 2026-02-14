@@ -2,10 +2,29 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-in-the-existing-internal-login-page-file-frontend-src-pages-internal-internallogin-tsx-add-a-claim-superadmin-ui-block-tied-to-the-backend-methods-on-page-load-call-actor-hassuperadmin-store-state-as-hassuperadmin-boolean-null-while-hassuperadmin-null-show-a-small-loading-indicator-rendering-rules-if-hassuperadmin-false-render-a-card-at-the-top-of-the-role-grid-or-immediately-before-the-grid-with-title-claim-superadmin-description-only-available-once-after-it-is-claimed-this-card-disappears-button-claim-superadmin-if-hassuperadmin-true-do-not-render-the-card-at-all-interaction-the-user-must-complete-internet-identity-login-first-keep-the-existing-internet-identity-login-button-behavior-intact-then-they-can-click-claim-superadmin-if-shown-on-clicking-the-button-call-actor-claimsuperadmin-if-ok-true-refresh-hassuperadmin-by-calling-actor-hassuperadmin-again-or-perform-a-light-page-reload-limited-to-this-page-if-ok-false-display-the-backend-message-as-an-error-ui-wording-constraint-do-not-use-the-word-service-or-service-anywhere-on-this-page",
-      "featureTitle": "In the existing Internal Login page file `frontend/src/pages/internal/InternalLogin.tsx`, add a \"Claim Superadmin\" UI block tied to the backend methods.\n\nOn page load:\n- Call `actor.hasSuperadmin()`.\n- Store state as `hasSuperadmin: boolean | null`.\n- While `hasSuperadmin === null`, show a small loading indicator.\n\nRendering rules:\n- If `hasSuperadmin === false`, render a card at the top of the role grid (or immediately before the grid) with:\n  - Title: \"Claim Superadmin\"\n  - Description: \"Only available once. After it is claimed, this card disappears.\"\n  - Button: \"Claim Superadmin\"\n- If `hasSuperadmin === true`, do not render the card at all.\n\nInteraction:\n- The user must complete Internet Identity login first (keep the existing Internet Identity login button behavior intact), then they can click \"Claim Superadmin\" (if shown).\n- On clicking the button, call `actor.claimSuperadmin()`.\n  - If `ok === true`, refresh `hasSuperadmin` by calling `actor.hasSuperadmin()` again (or perform a light page reload limited to this page).\n  - If `ok === false`, display the backend `message` as an error.\n\nUI wording constraint:\n- Do not use the word \"service\" or \"Service\" anywhere on this page.",
+      "featureId": "feature-update-frontend-src-app-tsx-to-register-new-tanstack-router-routes-for-the-existing-dashboard-pages-without-changing-or-removing-any-existing-routes-router-structure-or-other-code-add-the-new-routes-only-by-1-adding-imports-if-missing-and-2-adding-new-createroute-definitions-and-3-appending-the-new-route-variables-into-routetree-rootroute-addchildren",
+      "featureTitle": "Update `frontend/src/App.tsx` to register new TanStack Router routes for the existing dashboard pages, without changing or removing any existing routes, router structure, or other code. Add the new routes only by (1) adding imports if missing and (2) adding new `createRoute({ ... })` definitions, and (3) appending the new route variables into `routeTree = rootRoute.addChildren([ ... ])`.",
       "files": [
-        "frontend/src/pages/internal/InternalLogin.tsx"
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-routes-with-the-exact-paths-below-each-mapping-to-the-existing-dashboard-component-default-export-from-the-corresponding-file-superadmin-dashboard-superadmindashboard-from-frontend-src-pages-superadmin-superadmindashboard-tsx-admin-dashboard-admindashboard-from-frontend-src-pages-admin-admindashboard-tsx-asistenmu-dashboard-asistenmudashboard-from-frontend-src-pages-asistenmu-asistenmudashboard-tsx-concierge-dashboard-conciergedashboard-from-frontend-src-pages-concierge-conciergedashboard-tsx-strategicpartner-dashboard-strategicpartnerdashboard-from-frontend-src-pages-strategicpartner-strategicpartnerdashboard-tsx-management-dashboard-managementdashboard-from-frontend-src-pages-management-managementdashboard-tsx-finance-dashboard-financedashboard-from-frontend-src-pages-finance-financedashboard-tsx-if-a-component-is-already-imported-in-app-tsx-do-not-modify-that-import-if-it-is-not-imported-add-an-import-line-only-no-other-import-changes",
+      "featureTitle": "Add routes with the exact paths below, each mapping to the existing dashboard component (default export) from the corresponding file:\n- `/superadmin/dashboard` -> `SuperadminDashboard` from `frontend/src/pages/superadmin/SuperadminDashboard.tsx`\n- `/admin/dashboard` -> `AdminDashboard` from `frontend/src/pages/admin/AdminDashboard.tsx`\n- `/asistenmu/dashboard` -> `AsistenmuDashboard` from `frontend/src/pages/asistenmu/AsistenmuDashboard.tsx`\n- `/concierge/dashboard` -> `ConciergeDashboard` from `frontend/src/pages/concierge/ConciergeDashboard.tsx`\n- `/strategicpartner/dashboard` -> `StrategicPartnerDashboard` from `frontend/src/pages/strategicpartner/StrategicPartnerDashboard.tsx`\n- `/management/dashboard` -> `ManagementDashboard` from `frontend/src/pages/management/ManagementDashboard.tsx`\n- `/finance/dashboard` -> `FinanceDashboard` from `frontend/src/pages/finance/FinanceDashboard.tsx`\n\nIf a component is already imported in `App.tsx`, do not modify that import; if it is not imported, add an import line only (no other import changes).",
+      "files": [
+        "frontend/src/App.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",

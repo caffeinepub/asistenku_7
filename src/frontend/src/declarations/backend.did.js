@@ -48,6 +48,7 @@ export const WithdrawRequest = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'claimSuperadmin' : IDL.Func([], [IDL.Bool], []),
   'createTicket' : IDL.Func([IDL.Text, UserRole], [TicketId], []),
   'createWithdrawRequest' : IDL.Func([IDL.Nat], [IDL.Nat], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
@@ -67,11 +68,13 @@ export const idlService = IDL.Service({
       ],
       ['query'],
     ),
+  'getSuperadminPrincipal' : IDL.Func([], [IDL.Opt(IDL.Principal)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'hasSuperadmin' : IDL.Func([], [IDL.Bool], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'listAllTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
   'listAllWithdrawRequests' : IDL.Func(
@@ -138,6 +141,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'claimSuperadmin' : IDL.Func([], [IDL.Bool], []),
     'createTicket' : IDL.Func([IDL.Text, UserRole], [TicketId], []),
     'createWithdrawRequest' : IDL.Func([IDL.Nat], [IDL.Nat], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
@@ -157,11 +161,17 @@ export const idlFactory = ({ IDL }) => {
         ],
         ['query'],
       ),
+    'getSuperadminPrincipal' : IDL.Func(
+        [],
+        [IDL.Opt(IDL.Principal)],
+        ['query'],
+      ),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'hasSuperadmin' : IDL.Func([], [IDL.Bool], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'listAllTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
     'listAllWithdrawRequests' : IDL.Func(

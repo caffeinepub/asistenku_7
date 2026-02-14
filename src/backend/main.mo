@@ -63,6 +63,7 @@ actor {
   };
 
   // State
+  stable var superadminPrincipal : ?Principal = null;
   let tickets = Map.empty<TicketId, Ticket>();
   let withdrawRequests = Map.empty<Nat, WithdrawRequest>();
   let userProfiles = Map.empty<Principal, UserProfile>();
@@ -78,6 +79,27 @@ actor {
 
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
+
+  public query func hasSuperadmin() : async Bool {
+    switch (superadminPrincipal) {
+      case (null) { false };
+      case (_) { true };
+    };
+  };
+
+  public query func getSuperadminPrincipal() : async ?Principal {
+    superadminPrincipal;
+  };
+
+  public shared ({ caller }) func claimSuperadmin() : async Bool {
+    switch (superadminPrincipal) {
+      case (null) {
+        superadminPrincipal := ?caller;
+        true;
+      };
+      case (_) { false };
+    };
+  };
 
   // User Profile Methods
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
