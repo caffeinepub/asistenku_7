@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Insert a new titleless micro-authority text block on the landing page directly under “Tepat Tanpa Kehilangan Waktu” while keeping all existing sections and ordering intact.
+**Goal:** Enable a one-time superadmin claim flow by wiring new backend methods to a “Claim Superadmin” block on the Internal Login page, using the existing Internet Identity login flow.
 
 **Planned changes:**
-- Update only `frontend/src/components/asistenku/LandingPage.tsx` to add the specified `<section className="py-8"> ... </section>` block between “Tepat Tanpa Kehilangan Waktu” and the existing “Unit Layanan” section.
-- Ensure the new block has no title and no additional UI elements/wrappers beyond the exact provided JSX structure and Tailwind classes, and that all existing sections (including “Unit Layanan” and “Fase Layanan (Pricing)”) remain unchanged and in the correct order.
+- Add/ensure `hasSuperadmin()` and `claimSuperadmin()` methods exist in `backend/main.mo` with the exact required signatures and behaviors (first caller claims; idempotent for current superadmin; reject others).
+- Update `frontend/src/pages/internal/InternalLogin.tsx` to query `hasSuperadmin()` on load, show a loading indicator while unknown, and conditionally render a “Claim Superadmin” card only when no superadmin exists; require Internet Identity login before allowing the claim; show backend error messages on failure; avoid the word “service/Service” in page text.
+- Update exactly one frontend actor/binding helper file (e.g., `frontend/src/hooks/useActor.ts`) so the Internal Login page can call `hasSuperadmin()` and `claimSuperadmin()` after Internet Identity login, without any global refactors or routing changes.
 
-**User-visible outcome:** The landing page shows an additional short, titleless explanatory text block immediately below “Tepat Tanpa Kehilangan Waktu”, followed by the unchanged “Unit Layanan” section and the existing “Fase Layanan (Pricing)” section.
+**User-visible outcome:** On `/internal/login`, users can log in with Internet Identity and (only if no superadmin exists yet) claim superadmin once; after a successful claim the card disappears, and failed claims display the backend message.

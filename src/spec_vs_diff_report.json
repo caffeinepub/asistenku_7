@@ -1,43 +1,42 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T03:43:08.446Z",
-  "summary": "REQ-34 is not satisfied as written because the diff shows changes beyond inserting the specified micro-authority block in LandingPage.tsx, including modifications to additional files and additional landing page behavior/content changes not requested.",
+  "generatedAt": "2026-02-14T15:48:39.771Z",
+  "summary": "REQ-3 does not appear implemented because the only allowed helper/binding file change (e.g., frontend/src/hooks/useActor.ts) is not shown in the diff as modified. The diff also shows modifications to files outside the allowed scope (frontend-file-summaries.txt, project_state.json), which were not requested and violate the strict file constraints. REQ-1 backend methods cannot be confirmed from the provided truncated backend/main.mo snippet, and REQ-2 is only partially verifiable due to truncation (but does show actor.hasSuperadmin() being called and state added).",
   "missing_requirements": [
     {
-      "id": "REQ-34",
-      "requirement": "Update only `frontend/src/components/asistenku/LandingPage.tsx` (no other files modified).",
-      "reason": "The diff summary indicates 3 modified files, not just LandingPage.tsx.",
+      "id": "REQ-3",
+      "requirement": "Update the single existing frontend canister binding/helper file (e.g., frontend/src/hooks/useActor.ts) so Internal Login can safely call hasSuperadmin() and claimSuperadmin() after Internet Identity login.",
+      "reason": "The diff shows no modifications to any actor/binding helper file such as frontend/src/hooks/useActor.ts, and InternalLogin.tsx instead relies on type-casting the actor locally. This does not satisfy the requirement to update the single helper/binding file.",
       "evidence": [
-        "frontend/src/components/asistenku/LandingPage.tsx",
-        "frontend-file-summaries.txt",
-        "project_state.json"
+        "MODIFIED FILES list does not include frontend/src/hooks/useActor.ts (or any equivalent helper/binding file)",
+        "frontend/src/pages/internal/InternalLogin.tsx shows local `ExtendedActor` interface and casting rather than a helper update"
+      ]
+    },
+    {
+      "id": "REQ-1",
+      "requirement": "In backend/main.mo, ensure public query func hasSuperadmin() : async Bool and public shared({caller}) func claimSuperadmin() : async { ok: Bool; message: Text } exist with the specified claim/idempotent/error behavior.",
+      "reason": "The provided backend/main.mo content is truncated and does not include or confirm the presence of the required exported methods or their behavior.",
+      "evidence": [
+        "backend/main.mo (truncated): snippet does not show hasSuperadmin() or claimSuperadmin() definitions"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Modified files beyond `frontend/src/components/asistenku/LandingPage.tsx` (updated `frontend-file-summaries.txt` and `project_state.json`).",
-      "reason": "REQ-34 explicitly constrains scope to modifying only `frontend/src/components/asistenku/LandingPage.tsx`.",
+      "description": "Modified files outside the explicitly allowed set (only backend/main.mo, frontend/src/pages/internal/InternalLogin.tsx, and exactly one frontend actor/binding helper file were allowed).",
+      "reason": "The BuildRequest forbids modifying any other files; the diff indicates additional modified files not in the allowed list.",
       "evidence": [
-        "frontend-file-summaries.txt",
-        "project_state.json"
-      ]
-    },
-    {
-      "description": "Additional landing page changes beyond inserting the new micro-authority block (e.g., adding/altering sections like 'Bagaimana Kami Mendampingi', changing hero layout/copy, and changing pricing accordion behavior).",
-      "reason": "BuildRequest explicitly says not to change existing landing page copy/sections/behavior except inserting the new micro-authority block; diff metadata describes broader edits.",
-      "evidence": [
-        "frontend-file-summaries.txt",
-        "project_state.json",
-        "frontend/src/components/asistenku/LandingPage.tsx"
+        "frontend-file-summaries.txt (modified)",
+        "project_state.json (modified)"
       ]
     }
   ],
-  "confidence": 0.86,
+  "confidence": 0.72,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/asistenku/LandingPage.tsx",
+    "frontend/src/pages/internal/InternalLogin.tsx",
     "project_state.json"
   ]
 }

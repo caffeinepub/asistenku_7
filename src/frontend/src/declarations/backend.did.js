@@ -8,10 +8,182 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const TicketId = IDL.Nat;
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'role' : IDL.Text,
+  'isActive' : IDL.Bool,
+  'email' : IDL.Text,
+});
+export const TicketStatus = IDL.Variant({
+  'resolved' : IDL.Null,
+  'closed' : IDL.Null,
+  'open' : IDL.Null,
+  'inProgress' : IDL.Null,
+});
+export const Ticket = IDL.Record({
+  'id' : TicketId,
+  'status' : TicketStatus,
+  'creator' : IDL.Principal,
+  'description' : IDL.Text,
+  'targetRole' : UserRole,
+});
+export const WithdrawStatus = IDL.Variant({
+  'pending' : IDL.Null,
+  'approved' : IDL.Null,
+  'rejected' : IDL.Null,
+});
+export const WithdrawRequest = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : WithdrawStatus,
+  'creator' : IDL.Principal,
+  'amount' : IDL.Nat,
+});
+
+export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'createTicket' : IDL.Func([IDL.Text, UserRole], [TicketId], []),
+  'createWithdrawRequest' : IDL.Func([IDL.Nat], [IDL.Nat], []),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getStats' : IDL.Func(
+      [],
+      [
+        IDL.Record({
+          'totalTasks' : IDL.Nat,
+          'totalTicketsOpen' : IDL.Nat,
+          'totalClients' : IDL.Nat,
+          'totalPartners' : IDL.Nat,
+          'totalUsers' : IDL.Nat,
+          'totalWithdrawPending' : IDL.Nat,
+          'totalLayanan' : IDL.Nat,
+        }),
+      ],
+      ['query'],
+    ),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'listAllTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
+  'listAllWithdrawRequests' : IDL.Func(
+      [],
+      [IDL.Vec(WithdrawRequest)],
+      ['query'],
+    ),
+  'listMyTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
+  'listMyWithdrawRequests' : IDL.Func(
+      [],
+      [IDL.Vec(WithdrawRequest)],
+      ['query'],
+    ),
+  'listTicketsByTargetRole' : IDL.Func(
+      [UserRole],
+      [IDL.Vec(Ticket)],
+      ['query'],
+    ),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'updateTicketStatus' : IDL.Func([TicketId, TicketStatus], [], []),
+  'updateWithdrawStatus' : IDL.Func([IDL.Nat, WithdrawStatus], [], []),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const TicketId = IDL.Nat;
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'role' : IDL.Text,
+    'isActive' : IDL.Bool,
+    'email' : IDL.Text,
+  });
+  const TicketStatus = IDL.Variant({
+    'resolved' : IDL.Null,
+    'closed' : IDL.Null,
+    'open' : IDL.Null,
+    'inProgress' : IDL.Null,
+  });
+  const Ticket = IDL.Record({
+    'id' : TicketId,
+    'status' : TicketStatus,
+    'creator' : IDL.Principal,
+    'description' : IDL.Text,
+    'targetRole' : UserRole,
+  });
+  const WithdrawStatus = IDL.Variant({
+    'pending' : IDL.Null,
+    'approved' : IDL.Null,
+    'rejected' : IDL.Null,
+  });
+  const WithdrawRequest = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : WithdrawStatus,
+    'creator' : IDL.Principal,
+    'amount' : IDL.Nat,
+  });
+  
+  return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'createTicket' : IDL.Func([IDL.Text, UserRole], [TicketId], []),
+    'createWithdrawRequest' : IDL.Func([IDL.Nat], [IDL.Nat], []),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getStats' : IDL.Func(
+        [],
+        [
+          IDL.Record({
+            'totalTasks' : IDL.Nat,
+            'totalTicketsOpen' : IDL.Nat,
+            'totalClients' : IDL.Nat,
+            'totalPartners' : IDL.Nat,
+            'totalUsers' : IDL.Nat,
+            'totalWithdrawPending' : IDL.Nat,
+            'totalLayanan' : IDL.Nat,
+          }),
+        ],
+        ['query'],
+      ),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'listAllTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
+    'listAllWithdrawRequests' : IDL.Func(
+        [],
+        [IDL.Vec(WithdrawRequest)],
+        ['query'],
+      ),
+    'listMyTickets' : IDL.Func([], [IDL.Vec(Ticket)], ['query']),
+    'listMyWithdrawRequests' : IDL.Func(
+        [],
+        [IDL.Vec(WithdrawRequest)],
+        ['query'],
+      ),
+    'listTicketsByTargetRole' : IDL.Func(
+        [UserRole],
+        [IDL.Vec(Ticket)],
+        ['query'],
+      ),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'updateTicketStatus' : IDL.Func([TicketId, TicketStatus], [], []),
+    'updateWithdrawStatus' : IDL.Func([IDL.Nat, WithdrawStatus], [], []),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };

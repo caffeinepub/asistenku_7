@@ -10,7 +10,66 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface Ticket {
+  'id' : TicketId,
+  'status' : TicketStatus,
+  'creator' : Principal,
+  'description' : string,
+  'targetRole' : UserRole,
+}
+export type TicketId = bigint;
+export type TicketStatus = { 'resolved' : null } |
+  { 'closed' : null } |
+  { 'open' : null } |
+  { 'inProgress' : null };
+export interface UserProfile {
+  'name' : string,
+  'role' : string,
+  'isActive' : boolean,
+  'email' : string,
+}
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface WithdrawRequest {
+  'id' : bigint,
+  'status' : WithdrawStatus,
+  'creator' : Principal,
+  'amount' : bigint,
+}
+export type WithdrawStatus = { 'pending' : null } |
+  { 'approved' : null } |
+  { 'rejected' : null };
+export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'createTicket' : ActorMethod<[string, UserRole], TicketId>,
+  'createWithdrawRequest' : ActorMethod<[bigint], bigint>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getStats' : ActorMethod<
+    [],
+    {
+      'totalTasks' : bigint,
+      'totalTicketsOpen' : bigint,
+      'totalClients' : bigint,
+      'totalPartners' : bigint,
+      'totalUsers' : bigint,
+      'totalWithdrawPending' : bigint,
+      'totalLayanan' : bigint,
+    }
+  >,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'listAllTickets' : ActorMethod<[], Array<Ticket>>,
+  'listAllWithdrawRequests' : ActorMethod<[], Array<WithdrawRequest>>,
+  'listMyTickets' : ActorMethod<[], Array<Ticket>>,
+  'listMyWithdrawRequests' : ActorMethod<[], Array<WithdrawRequest>>,
+  'listTicketsByTargetRole' : ActorMethod<[UserRole], Array<Ticket>>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'updateTicketStatus' : ActorMethod<[TicketId, TicketStatus], undefined>,
+  'updateWithdrawStatus' : ActorMethod<[bigint, WithdrawStatus], undefined>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

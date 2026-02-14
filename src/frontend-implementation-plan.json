@@ -1,25 +1,40 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Insert titleless micro-authority block on Asistenku landing page",
+  "title": "Wire Superadmin Claim UI into Internal Login (frontend-only, strict file scope)",
   "requirements": [
     {
-      "id": "REQ-34",
-      "summary": "Insert a new titleless micro-authority block directly below the “Tepat Tanpa Kehilangan Waktu” section and before the existing “Unit Layanan” section, without changing any other landing page sections or their order.",
+      "id": "REQ-2",
+      "summary": "Add a \"Claim Superadmin\" card to Internal Login that loads `hasSuperadmin`, requires Internet Identity login before claiming, and calls `claimSuperadmin` with proper success/error handling (no \"service\" wording).",
       "acceptanceCriteria": [
-        "Only `frontend/src/components/asistenku/LandingPage.tsx` is modified.",
-        "The landing page section order is: “Tepat Tanpa Kehilangan Waktu” -> (new micro-authority block) -> existing “Unit Layanan” -> existing “Fase Layanan (Pricing)”.",
-        "The new block renders without any section title and without extra UI elements (no emoji, no divider, no card/box/shadow wrapper, no highlight).",
-        "The inserted JSX matches exactly the required structure and Tailwind classes (no additions/removals beyond what is necessary to place it in the page).",
-        "The new block text content matches exactly (including punctuation and JSX line breaks): “Struktur kami menjaga keseimbangan antara kualitas dan ketepatan.” and “Konversi unit layanan ditentukan melalui standar kerja yang terukur.” and “Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.”",
-        "The existing “Unit Layanan” section remains present and unchanged in copy and styling.",
-        "The existing “Fase Layanan (Pricing)” section is not moved and remains unchanged."
+        "When visiting `/internal/login` while no superadmin exists, after Internet Identity login completes, the \"Claim Superadmin\" card is visible and enabled.",
+        "Clicking \"Claim Superadmin\" successfully claims and then the card disappears without navigating away from `/internal/login`.",
+        "When a superadmin already exists, the \"Claim Superadmin\" card never renders.",
+        "On a failed claim attempt, the UI surfaces the exact `message` returned by the backend.",
+        "No new usage of the word \"service\"/\"Service\" appears in the Internal Login page UI text.",
+        "Existing role cards (Admin, Asistenmu, Concierge, Strategic Partner, Manajer, Finance, Management) and their existing behavior remain unchanged aside from positioning due to the new card."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/asistenku/LandingPage.tsx",
+          "path": "frontend/src/pages/internal/InternalLogin.tsx",
           "operation": "modify",
-          "description": "Insert the specified titleless micro-authority <section className=\"py-8\"> block immediately after the existing “Tepat Tanpa Kehilangan Waktu” section and immediately before the existing “Unit Layanan” section. Keep all existing sections (including “Unit Layanan”) unchanged and keep the “Fase Layanan (Pricing)” section in its current position; do not alter any other copy, links, IDs, ordering, or styling outside inserting this exact block."
+          "description": "Integrate Internet Identity authentication state and the backend actor to (1) call `actor.hasSuperadmin()` on page load and keep `hasSuperadmin: boolean | null` with a small loading indicator when null, (2) conditionally render a top-of-grid card titled \"Claim Superadmin\" with the specified description and button only when `hasSuperadmin === false`, (3) require Internet Identity login before enabling the claim button, (4) on click call `actor.claimSuperadmin()`, then refresh `hasSuperadmin` on success and show the exact backend `message` on failure, (5) ensure no UI copy uses the word \"service\"/\"Service\", and keep existing role card behaviors intact. Use shadcn-ui Card/Button components already used on the page to keep styling consistent; Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Update the existing actor binding hook so the Internal Login page can safely call `hasSuperadmin()` and `claimSuperadmin()` after Internet Identity login without refactors or routing changes.",
+      "acceptanceCriteria": [
+        "Internal Login can obtain a non-null actor after Internet Identity login and successfully call `hasSuperadmin()` and `claimSuperadmin()` through the existing actor creation flow.",
+        "No other pages/components are modified and there is no routing change beyond relying on the existing `/internal/login` route.",
+        "Changes are confined to the allowed single helper binding file and do not introduce app-wide refactors."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Extend the hook’s TypeScript typing (within this file only) so the returned `actor` type includes `hasSuperadmin(): Promise<boolean>` and `claimSuperadmin(): Promise<{ ok: boolean; message: string }>` as a safe superset of the existing `backendInterface`, without changing the actor creation flow or routing and without global refactors. Ensure Internal Login can call these methods after Internet Identity login via the existing identity-driven actor recreation."
         }
       ]
     }

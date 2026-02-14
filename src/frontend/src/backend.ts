@@ -89,10 +89,468 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface backendInterface {
+export interface Ticket {
+    id: TicketId;
+    status: TicketStatus;
+    creator: Principal;
+    description: string;
+    targetRole: UserRole;
 }
+export interface WithdrawRequest {
+    id: bigint;
+    status: WithdrawStatus;
+    creator: Principal;
+    amount: bigint;
+}
+export type TicketId = bigint;
+export interface UserProfile {
+    name: string;
+    role: string;
+    isActive: boolean;
+    email: string;
+}
+export enum TicketStatus {
+    resolved = "resolved",
+    closed = "closed",
+    open = "open",
+    inProgress = "inProgress"
+}
+export enum UserRole {
+    admin = "admin",
+    user = "user",
+    guest = "guest"
+}
+export enum WithdrawStatus {
+    pending = "pending",
+    approved = "approved",
+    rejected = "rejected"
+}
+export interface backendInterface {
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    createTicket(description: string, targetRole: UserRole): Promise<TicketId>;
+    createWithdrawRequest(amount: bigint): Promise<bigint>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserRole(): Promise<UserRole>;
+    getStats(): Promise<{
+        totalTasks: bigint;
+        totalTicketsOpen: bigint;
+        totalClients: bigint;
+        totalPartners: bigint;
+        totalUsers: bigint;
+        totalWithdrawPending: bigint;
+        totalLayanan: bigint;
+    }>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    isCallerAdmin(): Promise<boolean>;
+    listAllTickets(): Promise<Array<Ticket>>;
+    listAllWithdrawRequests(): Promise<Array<WithdrawRequest>>;
+    listMyTickets(): Promise<Array<Ticket>>;
+    listMyWithdrawRequests(): Promise<Array<WithdrawRequest>>;
+    listTicketsByTargetRole(role: UserRole): Promise<Array<Ticket>>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    updateTicketStatus(ticketId: TicketId, newStatus: TicketStatus): Promise<void>;
+    updateWithdrawStatus(requestId: bigint, newStatus: WithdrawStatus): Promise<void>;
+}
+import type { Ticket as _Ticket, TicketId as _TicketId, TicketStatus as _TicketStatus, UserProfile as _UserProfile, UserRole as _UserRole, WithdrawRequest as _WithdrawRequest, WithdrawStatus as _WithdrawStatus } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor._initializeAccessControlWithSecret(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async createTicket(arg0: string, arg1: UserRole): Promise<TicketId> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createTicket(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createTicket(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async createWithdrawRequest(arg0: bigint): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createWithdrawRequest(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createWithdrawRequest(arg0);
+            return result;
+        }
+    }
+    async getCallerUserProfile(): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserProfile();
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserProfile();
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserRole(): Promise<UserRole> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserRole();
+                return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserRole();
+            return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getStats(): Promise<{
+        totalTasks: bigint;
+        totalTicketsOpen: bigint;
+        totalClients: bigint;
+        totalPartners: bigint;
+        totalUsers: bigint;
+        totalWithdrawPending: bigint;
+        totalLayanan: bigint;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getStats();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getStats();
+            return result;
+        }
+    }
+    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserProfile(arg0);
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserProfile(arg0);
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async isCallerAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isCallerAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async listAllTickets(): Promise<Array<Ticket>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listAllTickets();
+                return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listAllTickets();
+            return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async listAllWithdrawRequests(): Promise<Array<WithdrawRequest>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listAllWithdrawRequests();
+                return from_candid_vec_n11(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listAllWithdrawRequests();
+            return from_candid_vec_n11(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async listMyTickets(): Promise<Array<Ticket>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listMyTickets();
+                return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listMyTickets();
+            return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async listMyWithdrawRequests(): Promise<Array<WithdrawRequest>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listMyWithdrawRequests();
+                return from_candid_vec_n11(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listMyWithdrawRequests();
+            return from_candid_vec_n11(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async listTicketsByTargetRole(arg0: UserRole): Promise<Array<Ticket>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listTicketsByTargetRole(to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg0));
+                return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listTicketsByTargetRole(to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg0));
+            return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(arg0);
+            return result;
+        }
+    }
+    async updateTicketStatus(arg0: TicketId, arg1: TicketStatus): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateTicketStatus(arg0, to_candid_TicketStatus_n16(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateTicketStatus(arg0, to_candid_TicketStatus_n16(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async updateWithdrawStatus(arg0: bigint, arg1: WithdrawStatus): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateWithdrawStatus(arg0, to_candid_WithdrawStatus_n18(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateWithdrawStatus(arg0, to_candid_WithdrawStatus_n18(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+}
+function from_candid_TicketStatus_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _TicketStatus): TicketStatus {
+    return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+}
+function from_candid_Ticket_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Ticket): Ticket {
+    return from_candid_record_n8(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n5(_uploadFile, _downloadFile, value);
+}
+function from_candid_WithdrawRequest_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _WithdrawRequest): WithdrawRequest {
+    return from_candid_record_n13(_uploadFile, _downloadFile, value);
+}
+function from_candid_WithdrawStatus_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _WithdrawStatus): WithdrawStatus {
+    return from_candid_variant_n15(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: bigint;
+    status: _WithdrawStatus;
+    creator: Principal;
+    amount: bigint;
+}): {
+    id: bigint;
+    status: WithdrawStatus;
+    creator: Principal;
+    amount: bigint;
+} {
+    return {
+        id: value.id,
+        status: from_candid_WithdrawStatus_n14(_uploadFile, _downloadFile, value.status),
+        creator: value.creator,
+        amount: value.amount
+    };
+}
+function from_candid_record_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: _TicketId;
+    status: _TicketStatus;
+    creator: Principal;
+    description: string;
+    targetRole: _UserRole;
+}): {
+    id: TicketId;
+    status: TicketStatus;
+    creator: Principal;
+    description: string;
+    targetRole: UserRole;
+} {
+    return {
+        id: value.id,
+        status: from_candid_TicketStatus_n9(_uploadFile, _downloadFile, value.status),
+        creator: value.creator,
+        description: value.description,
+        targetRole: from_candid_UserRole_n4(_uploadFile, _downloadFile, value.targetRole)
+    };
+}
+function from_candid_variant_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    resolved: null;
+} | {
+    closed: null;
+} | {
+    open: null;
+} | {
+    inProgress: null;
+}): TicketStatus {
+    return "resolved" in value ? TicketStatus.resolved : "closed" in value ? TicketStatus.closed : "open" in value ? TicketStatus.open : "inProgress" in value ? TicketStatus.inProgress : value;
+}
+function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    pending: null;
+} | {
+    approved: null;
+} | {
+    rejected: null;
+}): WithdrawStatus {
+    return "pending" in value ? WithdrawStatus.pending : "approved" in value ? WithdrawStatus.approved : "rejected" in value ? WithdrawStatus.rejected : value;
+}
+function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+}): UserRole {
+    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
+}
+function from_candid_vec_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_WithdrawRequest>): Array<WithdrawRequest> {
+    return value.map((x)=>from_candid_WithdrawRequest_n12(_uploadFile, _downloadFile, x));
+}
+function from_candid_vec_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Ticket>): Array<Ticket> {
+    return value.map((x)=>from_candid_Ticket_n7(_uploadFile, _downloadFile, x));
+}
+function to_candid_TicketStatus_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: TicketStatus): _TicketStatus {
+    return to_candid_variant_n17(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_WithdrawStatus_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: WithdrawStatus): _WithdrawStatus {
+    return to_candid_variant_n19(_uploadFile, _downloadFile, value);
+}
+function to_candid_variant_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: TicketStatus): {
+    resolved: null;
+} | {
+    closed: null;
+} | {
+    open: null;
+} | {
+    inProgress: null;
+} {
+    return value == TicketStatus.resolved ? {
+        resolved: null
+    } : value == TicketStatus.closed ? {
+        closed: null
+    } : value == TicketStatus.open ? {
+        open: null
+    } : value == TicketStatus.inProgress ? {
+        inProgress: null
+    } : value;
+}
+function to_candid_variant_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: WithdrawStatus): {
+    pending: null;
+} | {
+    approved: null;
+} | {
+    rejected: null;
+} {
+    return value == WithdrawStatus.pending ? {
+        pending: null
+    } : value == WithdrawStatus.approved ? {
+        approved: null
+    } : value == WithdrawStatus.rejected ? {
+        rejected: null
+    } : value;
+}
+function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+} {
+    return value == UserRole.admin ? {
+        admin: null
+    } : value == UserRole.user ? {
+        user: null
+    } : value == UserRole.guest ? {
+        guest: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;

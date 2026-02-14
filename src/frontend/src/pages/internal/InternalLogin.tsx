@@ -1,20 +1,89 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useNavigate } from '@tanstack/react-router';
+import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useActor } from '@/hooks/useActor';
+import { Loader2 } from 'lucide-react';
 
 const roles = [
-  'admin',
-  'asistenmu',
-  'concierge',
-  'strategicpartner',
-  'manajer',
-  'finance',
-  'management',
-  'superadmin',
+  { name: 'Admin', key: 'admin' },
+  { name: 'Asistenmu', key: 'asistenmu' },
+  { name: 'Concierge', key: 'concierge' },
+  { name: 'Strategic Partner', key: 'strategicpartner' },
+  { name: 'Manajer', key: 'manajer' },
+  { name: 'Finance', key: 'finance' },
+  { name: 'Management', key: 'management' },
 ];
 
+// Extended interface for superadmin methods
+interface ExtendedActor {
+  hasSuperadmin(): Promise<boolean>;
+  claimSuperadmin(): Promise<{ ok: boolean; message: string }>;
+}
+
 export default function InternalLogin() {
-  const navigate = useNavigate();
+  const { login, clear, identity, loginStatus } = useInternetIdentity();
+  const { actor } = useActor();
+  const [preparingWorkspace, setPreparingWorkspace] = useState<Record<string, boolean>>({});
+  const [hasSuperadmin, setHasSuperadmin] = useState<boolean | null>(null);
+  const [claimingSuper, setClaimingSuper] = useState(false);
+  const [claimError, setClaimError] = useState<string | null>(null);
+
+  const isAuthenticated = !!identity;
+  const isLoggingIn = loginStatus === 'logging-in';
+
+  // Check if superadmin exists when actor is available
+  useEffect(() => {
+    if (actor) {
+      const extendedActor = actor as unknown as ExtendedActor;
+      extendedActor.hasSuperadmin()
+        .then(setHasSuperadmin)
+        .catch(() => setHasSuperadmin(null));
+    }
+  }, [actor]);
+
+  const handleLogin = async () => {
+    if (isAuthenticated) {
+      await clear();
+      setHasSuperadmin(null);
+    } else {
+      try {
+        await login();
+      } catch (error: any) {
+        console.error('Login error:', error);
+      }
+    }
+  };
+
+  const handleClaimSuperadmin = async () => {
+    if (!actor || !isAuthenticated) return;
+    
+    setClaimingSuper(true);
+    setClaimError(null);
+    
+    try {
+      const extendedActor = actor as unknown as ExtendedActor;
+      const result = await extendedActor.claimSuperadmin();
+      if (result.ok) {
+        // Refresh hasSuperadmin state
+        const newStatus = await extendedActor.hasSuperadmin();
+        setHasSuperadmin(newStatus);
+      } else {
+        setClaimError(result.message);
+      }
+    } catch (error: any) {
+      setClaimError(error.message || 'Gagal claim superadmin');
+    } finally {
+      setClaimingSuper(false);
+    }
+  };
+
+  const handleWorkspaceClick = (roleKey: string) => {
+    setPreparingWorkspace((prev) => ({
+      ...prev,
+      [roleKey]: true,
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6">
@@ -33,53 +102,84 @@ export default function InternalLogin() {
             <div className="space-y-4">
               <Button
                 className="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl py-6"
-                onClick={() => {}}
+                onClick={handleLogin}
+                disabled={isLoggingIn}
               >
-                Login Internet Identity
+                {isLoggingIn ? 'Logging in...' : isAuthenticated ? 'Logout' : 'Login Internet Identity'}
               </Button>
-              <p className="text-xs text-center text-gray-500">
-                Simulasi UI (belum terhubung).
-              </p>
             </div>
+
+            {/* Claim Superadmin Card - only show when no superadmin exists */}
+            {hasSuperadmin === null && isAuthenticated && (
+              <div className="flex justify-center py-2">
+                <Loader2 className="h-5 w-5 animate-spin text-teal-600" />
+              </div>
+            )}
+
+            {hasSuperadmin === false && (
+              <Card className="rounded-2xl border-2 border-amber-400 bg-amber-50 shadow-md">
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Claim Superadmin
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Hanya bisa sekali. Setelah di-claim, card ini hilang.
+                    </p>
+                  </div>
+                  <Button
+                    className="w-full rounded-xl bg-amber-600 hover:bg-amber-700 text-white"
+                    onClick={handleClaimSuperadmin}
+                    disabled={!isAuthenticated || claimingSuper}
+                  >
+                    {claimingSuper ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Claiming...
+                      </>
+                    ) : (
+                      'Claim Superadmin'
+                    )}
+                  </Button>
+                  {claimError && (
+                    <p className="text-xs text-red-600 text-center">
+                      {claimError}
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
               {roles.map((role) => (
                 <Card
-                  key={role}
+                  key={role.key}
                   className="rounded-2xl border border-gray-200 hover:border-teal-300 hover:shadow-md transition-all duration-200"
                 >
                   <CardContent className="p-6 space-y-4">
-                    <h3 className="text-lg font-medium text-gray-900 capitalize">
-                      {role}
-                    </h3>
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900">
+                        {role.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">Masuk ke workspace</p>
+                    </div>
                     <Button
                       variant="outline"
                       className="w-full rounded-xl border-teal-600 text-teal-600 hover:bg-teal-50"
-                      onClick={() => {}}
+                      onClick={() => handleWorkspaceClick(role.key)}
+                      disabled={!isAuthenticated}
                     >
-                      Masuk ke ruang kerja
+                      Workspace
                     </Button>
+                    {preparingWorkspace[role.key] && (
+                      <p className="text-xs text-gray-500 text-center">
+                        Workspace sedang dipersiapkan.
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               ))}
             </div>
-
-            <div className="relative mt-8">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="bg-white px-2 text-gray-500">Belum terdaftar?</span>
-              </div>
-            </div>
-
-            <Button
-              variant="ghost"
-              className="w-full text-teal-600 hover:text-teal-700 hover:bg-teal-50"
-              onClick={() => navigate({ to: '/internal/register' })}
-            >
-              Daftar Internal
-            </Button>
           </CardContent>
         </Card>
       </div>

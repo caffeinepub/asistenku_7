@@ -7,13 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useNavigate } from '@tanstack/react-router';
 
 const roles = [
-  'admin',
-  'asistenmu',
-  'concierge',
-  'strategicpartner',
-  'manajer',
-  'finance',
-  'management',
+  { label: 'Admin', value: 'admin' },
+  { label: 'Asistenmu', value: 'asistenmu' },
+  { label: 'Concierge', value: 'concierge' },
+  { label: 'Strategic Partner', value: 'strategicpartner' },
+  { label: 'Manajer', value: 'manajer' },
+  { label: 'Finance', value: 'finance' },
+  { label: 'Management', value: 'management' },
 ];
 
 export default function InternalRegister() {
@@ -37,18 +37,18 @@ export default function InternalRegister() {
         <Card className="w-full max-w-md shadow-lg rounded-3xl border-0">
           <CardHeader className="space-y-6 pt-8 pb-4">
             <div className="flex justify-center">
-              <img src="/assets/asistenku-icon.png" height="28" alt="Asistenku" />
+              <img src="asistenku-icon.png" height="28" />
             </div>
           </CardHeader>
           <CardContent className="space-y-6 pb-8 text-center">
             <p className="text-gray-900">
-              Pendaftaran terkirim. Menunggu persetujuan.
+              Terkirim. Menunggu persetujuan.
             </p>
             <Button
               className="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl py-6"
               onClick={() => navigate({ to: '/internal/login' })}
             >
-              Kembali ke Masuk
+              Kembali ke Masuk Internal
             </Button>
           </CardContent>
         </Card>
@@ -61,10 +61,10 @@ export default function InternalRegister() {
       <Card className="w-full max-w-md shadow-lg rounded-3xl border-0">
         <CardHeader className="space-y-6 pt-8 pb-4">
           <div className="flex justify-center">
-            <img src="/assets/asistenku-icon.png" height="28" alt="Asistenku" />
+            <img src="asistenku-icon.png" height="28" />
           </div>
           <div className="text-center space-y-2">
-            <h1 className="text-2xl font-semibold text-gray-900">Daftar Internal</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Pendaftaran Internal</h1>
             <p className="text-sm text-gray-600">Untuk Tim Asistenku</p>
           </div>
         </CardHeader>
@@ -115,8 +115,8 @@ export default function InternalRegister() {
                 </SelectTrigger>
                 <SelectContent>
                   {roles.map((role) => (
-                    <SelectItem key={role} value={role} className="capitalize">
-                      {role}
+                    <SelectItem key={role.value} value={role.value}>
+                      {role.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
