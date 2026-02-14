@@ -1,112 +1,121 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Stabilize App.tsx routing with single BrowserRouter, single Routes tree, and NotFound fallback",
+  "title": "LandingPage.tsx-only landing updates: inline hero + new sections + collapsed pricing accordion",
   "requirements": [
     {
-      "id": "REQ-22",
-      "summary": "Refactor App.tsx into a minimal React Router entry that uses exactly one BrowserRouter and a single Routes block, with '/' rendering the existing LandingPage.",
+      "id": "REQ-27",
+      "summary": "Update landing layout by editing only LandingPage.tsx; inline the updated Hero and pricing behavior while keeping existing Header/JoinTeamSection/Penutup/Footer rendering unchanged.",
       "acceptanceCriteria": [
-        "`frontend/src/App.tsx` uses `BrowserRouter` (single instance) and a single `Routes` block.",
-        "Navigating to `/` renders the existing landing page (`LandingPage`) with no copy/layout changes.",
-        "No other file is required to add additional router wrappers (i.e., router is not wrapped elsewhere)."
+        "The only modified file is `frontend/src/components/asistenku/LandingPage.tsx`.",
+        "No backend files are changed.",
+        "No routing files are changed.",
+        "Client/partner/internal login/register pages and their structure remain unchanged.",
+        "`LandingPage.tsx` continues to render `Header`, `JoinTeamSection`, `Penutup`, and `Footer` (can be via existing imports)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
           "operation": "modify",
-          "description": "Replace the current TanStack Router setup with a minimal React Router entry: a single BrowserRouter wrapping a single Routes tree. Ensure the '/' route renders the existing LandingPage component without modifying LandingPage or its composed sections."
+          "description": "Refactor LandingPage composition so Hero and pricing sections are implemented inline (do not render the existing `Hero` and `LayananSection` components), while continuing to render `Header`, `JoinTeamSection`, `Penutup`, and `Footer` as-is. Ensure the on-page anchor used by `Header` scroll (id=\"layanan\") remains present on the page."
         }
       ]
     },
     {
-      "id": "REQ-23",
-      "summary": "Add a '*' NotFound fallback route in App.tsx that shows a centered calm card with exact strings and a button navigating back to '/'.",
+      "id": "REQ-28",
+      "summary": "Update inline Hero to keep the existing headline copy unchanged and insert the exact definition line directly below it and above CTAs.",
       "acceptanceCriteria": [
-        "Navigating to an unknown route (e.g., `/does-not-exist`) renders the NotFound card instead of a blank screen.",
-        "The NotFound view is centered and visually calm (card with whitespace, rounded corners, subtle shadow).",
-        "The NotFound view displays exactly: `404`, `Halaman tidak ditemukan.`, and a `Kembali` button that routes to `/`."
+        "The new definition sentence appears directly below the hero headline and above the CTA buttons/links.",
+        "The definition sentence matches exactly: \"Asistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\"",
+        "No other existing hero copy is altered."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
           "operation": "modify",
-          "description": "Add a React Router '*' fallback route that renders a centered, calm card UI containing the exact title '404', text 'Halaman tidak ditemukan.', and a 'Kembali' button that navigates to '/'. Use the shadcn-ui Card/Button components for consistent styling (Verify the component's usage instructions before implementing.) and use React Router navigation primitives that avoid hooks inside App.tsx (e.g., Link)."
+          "description": "Implement the Hero section directly in `LandingPage.tsx`, preserving the current headline text exactly as displayed today (from the existing Hero) and inserting the exact definition sentence immediately under the headline and before the CTA area. Use the shadcn-ui `Button` component for the CTA button(s) if needed; verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-24",
-      "summary": "Eliminate duplicate router providers/route trees/Routes blocks and any leftover dev-only routing code that could cause loops, repeated mounts, hangs, or blank screens.",
+      "id": "REQ-29",
+      "summary": "Resize the existing hero image in LandingPage.tsx so it is visually secondary (<=40% width on desktop; contained and non-dominant on mobile) without changing the image asset.",
       "acceptanceCriteria": [
-        "`frontend/src/App.tsx` contains no nested/recursive router providers (e.g., a provider that renders itself through a route component).",
-        "Preview loads reliably without intermittent blank white pages or hangs attributable to routing setup."
+        "Hero image continues to use `/assets/heroimage.png` (no filename changes).",
+        "At desktop breakpoints, the rendered hero image width is constrained to <= 40% of the hero container width.",
+        "On small screens, the image can be full width within the content container but is not full-bleed edge-to-edge and does not dominate the viewport (reasonable max-height / spacing so text remains primary)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
           "operation": "modify",
-          "description": "Remove the recursive router/provider pattern and any TanStack Router route-tree construction from App.tsx so there is no self-referential rendering, nested providers, or duplicate routing trees that can cause render loops or repeated mounts."
-        },
-        {
-          "path": "frontend/src/pages/client/LoginClient.tsx",
-          "operation": "modify",
-          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
-        },
-        {
-          "path": "frontend/src/pages/client/RegisterClient.tsx",
-          "operation": "modify",
-          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
-        },
-        {
-          "path": "frontend/src/pages/partner/LoginPartner.tsx",
-          "operation": "modify",
-          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
-        },
-        {
-          "path": "frontend/src/pages/partner/RegisterPartner.tsx",
-          "operation": "modify",
-          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
-        },
-        {
-          "path": "frontend/src/pages/internal/InternalLogin.tsx",
-          "operation": "modify",
-          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
-        },
-        {
-          "path": "frontend/src/pages/internal/InternalRegister.tsx",
-          "operation": "modify",
-          "description": "Update navigation usage to be compatible with React Router (replace TanStack Router navigation helpers with React Router equivalents) to prevent runtime errors/blank screens after App.tsx routing refactor."
+          "description": "Adjust the inline Hero layout to use `/assets/heroimage.png` but constrain its desktop size to at most ~40% of the hero container width and keep it centered. On mobile, keep the image within the content container (not full-bleed) with a reasonable max-width/max-height so text remains the primary focus."
         }
       ]
     },
     {
-      "id": "REQ-25",
-      "summary": "Verify and fix App.tsx imports and route-component casing/paths so builds succeed on case-sensitive file systems and all routes resolve correctly.",
+      "id": "REQ-30",
+      "summary": "Add the new 'Bagaimana Kami Mendampingi' section directly after Hero with strictly copy-locked lines and closing statement.",
       "acceptanceCriteria": [
-        "Project builds without import-resolution errors on case-sensitive file systems.",
-        "All routes used in App.tsx resolve to the intended existing components."
+        "A new section appears directly after the Hero section.",
+        "Section heading matches exactly: \"Bagaimana Kami Mendampingi\".",
+        "The four step lines render exactly as provided, in order, with no added text.",
+        "The closing line renders exactly as provided, separated by a small vertical gap from the steps."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
           "operation": "modify",
-          "description": "Verify all route component imports (LandingPage, client/partner/internal pages) use correct relative paths and correct filename casing; ensure React Router imports come from react-router-dom and all referenced route components exist and resolve correctly."
+          "description": "Insert a new section immediately after the inline Hero titled exactly \"Bagaimana Kami Mendampingi\" and render the four provided lines as separate paragraphs or list items in the same order, followed by a small vertical gap and the exact closing line, with no copy changes."
         }
       ]
     },
     {
-      "id": "REQ-26",
-      "summary": "Ensure App.tsx is side-effect free: no hooks, effects, timers, listeners, or async-dependent conditional initial rendering.",
+      "id": "REQ-31",
+      "summary": "Add the 'Tepat Tanpa Kehilangan Waktu' section immediately after the previous section with strictly copy-locked paragraph text.",
       "acceptanceCriteria": [
-        "`frontend/src/App.tsx` contains no hooks or side-effectful logic (no effects, timers, global listeners).",
-        "Initial render always mounts a route component deterministically, without waiting on async state."
+        "A new section appears after the Cara Kerja section.",
+        "Section heading matches exactly: \"Tepat Tanpa Kehilangan Waktu\".",
+        "The paragraph matches exactly as provided, with no additional copy."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
           "operation": "modify",
-          "description": "Keep App.tsx as a pure render-only routing entry: no useEffect/useState hooks, no intervals/timeouts, no event listeners, and no async-gated conditional rendering before routes mount."
+          "description": "Add a new section immediately after \"Bagaimana Kami Mendampingi\" titled exactly \"Tepat Tanpa Kehilangan Waktu\" and render the provided paragraph verbatim with no extra words."
+        }
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "summary": "Add the 'Unit Layanan' messaging section immediately after 'Tepat Tanpa Kehilangan Waktu' with the two strictly copy-locked sentences.",
+      "acceptanceCriteria": [
+        "A new section appears after the Ketepatan & Paralel section.",
+        "The two sentences appear exactly as provided, in order, with no extra text added."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Add a new section immediately after \"Tepat Tanpa Kehilangan Waktu\" and render the two specified sentences verbatim (in order) with no additional copy."
+        }
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "summary": "Implement the 'Fase Layanan (Pricing)' accordion card group in LandingPage.tsx with all cards collapsed by default, strict expanded content, and smooth 200–300ms animation while avoiding disallowed wording.",
+      "acceptanceCriteria": [
+        "A pricing/fase-layanan section exists on the landing page and renders its cards with collapsed-by-default behavior.",
+        "In collapsed state, no price text is visible anywhere in the card.",
+        "Expanding a card reveals exactly these three elements in order with exact strings:\n1) \"Rp 3.500.000 untuk alokasi 22 Unit Layanan\" (bold)\n2) \"Untuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\" (smaller/secondary)\n3) Button text: \"Hubungi Concierge Kami\"",
+        "Open/close animation is smooth and lasts ~200–300ms.",
+        "The landing page contains no occurrences of the string \"/bulan\" and does not introduce the words \"upgrade\" or \"top up\" or subscription/auto-calculation phrasing."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/asistenku/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Implement an inline \"Fase Layanan (Pricing)\" section (attach id=\"layanan\" here to preserve existing Header scroll behavior) containing a group of clickable cards with accordion behavior: all collapsed by default; collapsed cards show only phase name + short description + clear affordance; expanded card reveals exactly the three specified elements in the exact order and copy, with a smooth 200–300ms open/close animation. Ensure no \"/bulan\" string or disallowed words (\"upgrade\", \"top up\", subscription/auto-calculation wording) are introduced. Use the shadcn-ui `Button` component for the \"Hubungi Concierge Kami\" button and style it with the primary brand color; verify the component's usage instructions before implementing."
         }
       ]
     }

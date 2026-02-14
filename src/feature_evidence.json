@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-refactor-frontend-src-app-tsx-to-be-a-minimal-stable-react-router-entrypoint-wrap-the-app-with-exactly-one-browserrouter-and-render-exactly-one-routes-block-ensure-the-route-renders-the-existing-landingpage-component",
-      "featureTitle": "Refactor `frontend/src/App.tsx` to be a minimal, stable React Router entrypoint: wrap the app with **exactly one** `BrowserRouter` and render **exactly one** `Routes` block. Ensure the route `\"/\"` renders the existing `LandingPage` component.",
+      "featureId": "feature-edit-only-frontend-src-components-asistenku-landingpage-tsx-to-implement-the-updated-landing-layout-and-behavior-while-keeping-the-rest-of-the-app-unchanged-because-the-required-changes-affect-hero-and-pricing-behavior-but-other-files-must-not-be-edited-implement-the-updated-hero-the-three-new-informational-sections-and-the-new-collapsed-by-default-pricing-fase-layanan-section-directly-inside-landingpage-tsx-i-e-do-not-rely-on-hero-layanansection-implementations-that-cannot-be-modified-keep-rendering-the-existing-header-jointeamsection-penutup-and-footer-components-as-is",
+      "featureTitle": "Edit only `frontend/src/components/asistenku/LandingPage.tsx` to implement the updated landing layout and behavior while keeping the rest of the app unchanged. Because the required changes affect Hero and pricing behavior but other files must not be edited, implement the updated Hero, the three new informational sections, and the new collapsed-by-default pricing (\"Fase Layanan\") section directly inside `LandingPage.tsx` (i.e., do not rely on `Hero` / `LayananSection` implementations that cannot be modified). Keep rendering the existing `Header`, `JoinTeamSection`, `Penutup`, and `Footer` components as-is.",
       "files": [
-        "frontend/src/App.tsx"
+        "frontend/src/components/asistenku/LandingPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,15 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-22"
+        "REQ-27"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-notfound-fallback-route-in-frontend-src-app-tsx-that-renders-a-centered-calm-card-ui-with-the-exact-strings-title-404-text-halaman-tidak-ditemukan-and-a-button-labeled-kembali-that-navigates-to",
-      "featureTitle": "Add a `\"*\"` NotFound fallback route in `frontend/src/App.tsx` that renders a centered, calm card UI with the exact strings: title `\"404\"`, text `\"Halaman tidak ditemukan.\"`, and a button labeled `\"Kembali\"` that navigates to `\"/\"`.",
+      "featureId": "feature-update-the-hero-section-content-and-layout-within-landingpage-tsx-with-strict-copy-locking-keep-the-existing-hero-headline-text-exactly-as-currently-displayed-and-insert-the-following-definition-line-immediately-under-the-main-hero-headline-and-before-the-cta-area-exact-string-no-edits-asistenku-adalah-sistem-pendampingan-dalam-pengaturan-delegasi-tugas",
+      "featureTitle": "Update the Hero section content and layout within `LandingPage.tsx` with strict copy locking: keep the existing hero headline text exactly as currently displayed, and insert the following definition line immediately under the main hero headline and before the CTA area (exact string, no edits):\n\n\"Asistenku adalah sistem pendampingan dalam pengaturan delegasi tugas.\"",
       "files": [
-        "frontend/src/App.tsx"
+        "frontend/src/components/asistenku/LandingPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -33,16 +33,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-23"
+        "REQ-28"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-remove-avoid-any-duplicate-router-providers-duplicate-route-trees-duplicate-routes-blocks-or-leftover-development-only-code-in-frontend-src-app-tsx-that-could-cause-render-loops-repeated-mounts-or-preview-hangs-blank-screens",
-      "featureTitle": "Remove/avoid any duplicate router providers, duplicate route trees, duplicate `Routes` blocks, or leftover development-only code in `frontend/src/App.tsx` that could cause render loops, repeated mounts, or preview hangs/blank screens.",
+      "featureId": "feature-resize-the-hero-image-within-landingpage-tsx-do-not-change-the-asset-file-to-reduce-its-dominance-on-desktop-the-image-must-be-at-most-40-of-the-hero-container-width-on-mobile-it-should-remain-full-width-but-not-visually-dominant-not-full-bleed-not-filling-the-viewport-height-keep-the-image-centered-and-avoid-a-full-bleed-presentation",
+      "featureTitle": "Resize the hero image within `LandingPage.tsx` (do not change the asset file) to reduce its dominance: on desktop, the image must be at most 40% of the hero container width; on mobile it should remain full width but not visually dominant (not full-bleed, not filling the viewport height). Keep the image centered and avoid a full-bleed presentation.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/internal/InternalRegister.tsx"
+        "frontend/src/components/asistenku/LandingPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -52,15 +51,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-24"
+        "REQ-29"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-verify-and-fix-if-needed-all-imports-used-by-frontend-src-app-tsx-so-they-use-correct-relative-paths-and-correct-file-name-casing-for-all-route-components-landingpage-client-partner-internal-pages",
-      "featureTitle": "Verify and fix (if needed) all imports used by `frontend/src/App.tsx` so they use correct relative paths and correct file name casing for all route components (LandingPage, client/partner/internal pages).",
+      "featureId": "feature-add-a-new-section-immediately-after-the-hero-section-in-landingpage-tsx-titled-exactly-bagaimana-kami-mendampingi-and-render-the-following-lines-exactly-no-edits-no-extra-words-preserving-line-breaks-as-separate-paragraphs-or-list-items-sampaikan-kebutuhan-anda-asistenmu-menyusunnya-menjadi-brief-yang-jelas-dan-terstruktur-partner-yang-tepat-dipilih-dan-dikelola-hasil-diperiksa-sebelum-sampai-ke-anda-then-separated-by-a-small-vertical-gap-render-this-closing-line-exactly-anda-tidak-lagi-mengelola-orang-dan-proses-anda-hanya-mengelola-keputusan",
+      "featureTitle": "Add a new section immediately after the Hero section in `LandingPage.tsx` titled exactly \"Bagaimana Kami Mendampingi\" and render the following lines exactly (no edits, no extra words), preserving line breaks as separate paragraphs or list items:\n\n\"Sampaikan kebutuhan Anda.\"\n\"Asistenmu menyusunnya menjadi brief yang jelas dan terstruktur.\"\n\"Partner yang tepat dipilih dan dikelola.\"\n\"Hasil diperiksa sebelum sampai ke Anda.\"\n\nThen, separated by a small vertical gap, render this closing line exactly:\n\n\"Anda tidak lagi mengelola orang dan proses. Anda hanya mengelola keputusan.\"",
       "files": [
-        "frontend/src/App.tsx"
+        "frontend/src/components/asistenku/LandingPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -70,15 +69,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-25"
+        "REQ-30"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-frontend-src-app-tsx-has-no-effects-or-runtime-side-effects-no-useeffect-no-intervals-timeouts-no-event-listeners-and-no-conditional-rendering-that-depends-on-async-state-for-initial-route-rendering",
-      "featureTitle": "Ensure `frontend/src/App.tsx` has no effects or runtime side-effects: no `useEffect`, no intervals/timeouts, no event listeners, and no conditional rendering that depends on async state for initial route rendering.",
+      "featureId": "feature-add-a-new-section-immediately-after-bagaimana-kami-mendampingi-in-landingpage-tsx-titled-exactly-tepat-tanpa-kehilangan-waktu-and-render-the-following-paragraph-exactly-no-edits-no-extra-words-kami-menjaga-ketepatan-dalam-kebutuhan-mendesak-struktur-kami-memungkinkan-pekerjaan-dijalankan-secara-paralel-tanpa-kehilangan-kontrol",
+      "featureTitle": "Add a new section immediately after \"Bagaimana Kami Mendampingi\" in `LandingPage.tsx` titled exactly \"Tepat Tanpa Kehilangan Waktu\" and render the following paragraph exactly (no edits, no extra words):\n\n\"Kami menjaga ketepatan. Dalam kebutuhan mendesak, struktur kami memungkinkan pekerjaan dijalankan secara paralel tanpa kehilangan kontrol.\"",
       "files": [
-        "frontend/src/App.tsx"
+        "frontend/src/components/asistenku/LandingPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -88,7 +87,43 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-26"
+        "REQ-31"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-new-section-immediately-after-tepat-tanpa-kehilangan-waktu-in-landingpage-tsx-for-unit-layanan-messaging-in-this-section-include-the-following-two-sentences-exactly-no-edits-konversi-unit-layanan-tidak-ditentukan-secara-sembarangan-anda-tidak-perlu-menghitung-menegosiasikan-atau-memikirkan-angka-di-level-eksekusi",
+      "featureTitle": "Add a new section immediately after \"Tepat Tanpa Kehilangan Waktu\" in `LandingPage.tsx` for \"Unit Layanan\" messaging. In this section, include the following two sentences exactly (no edits):\n\n\"Konversi unit layanan tidak ditentukan secara sembarangan.\"\n\"Anda tidak perlu menghitung, menegosiasikan, atau memikirkan angka di level eksekusi.\"",
+      "files": [
+        "frontend/src/components/asistenku/LandingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-32"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-in-landingpage-tsx-implement-a-fase-layanan-pricing-card-group-with-accordion-behavior-collapsed-by-default-that-meets-these-rules-collapsed-default-state-for-every-card-shows-only-phase-name-a-short-phase-description-and-a-clear-visual-affordance-that-the-card-is-clickable-expandable-must-not-show-any-price-content-while-collapsed-all-cards-must-be-collapsed-by-default-expanded-state-when-a-card-is-expanded-show-the-following-content-in-this-exact-order-and-exact-strings-no-edits-1-bold-single-line-rp-3-500-000-untuk-alokasi-22-unit-layanan-2-smaller-secondary-text-untuk-kebutuhan-dengan-skala-yang-lebih-besar-struktur-layanan-dapat-dikurasi-bersama-concierge-kami-3-a-button-labeled-exactly-hubungi-concierge-kami-animation-accordion-open-close-animation-must-be-smooth-within-200-300ms-style-rules-do-not-include-bulan-anywhere-do-not-include-the-words-upgrade-top-up-any-subscription-wording-or-any-auto-calculation-wording-price-line-must-be-bold-flexibility-line-must-appear-in-a-secondary-less-prominent-color-the-button-uses-the-primary-brand-color",
+      "featureTitle": "In `LandingPage.tsx`, implement a \"Fase Layanan (Pricing)\" card group with accordion behavior (collapsed by default) that meets these rules:\n\nCollapsed default state for every card:\n- Shows only: phase name, a short phase description, and a clear visual affordance that the card is clickable/expandable.\n- Must not show any price content while collapsed.\n- All cards must be collapsed by default.\n\nExpanded state:\n- When a card is expanded, show the following content in this exact order and exact strings (no edits):\n  1) Bold, single line: \"Rp 3.500.000 untuk alokasi 22 Unit Layanan\"\n  2) Smaller/secondary text: \"Untuk kebutuhan dengan skala yang lebih besar, struktur layanan dapat dikurasi bersama Concierge kami.\"\n  3) A button labeled exactly: \"Hubungi Concierge Kami\"\n\nAnimation:\n- Accordion open/close animation must be smooth, within 200–300ms.\n\nStyle rules:\n- Do not include \"/bulan\" anywhere.\n- Do not include the words: \"upgrade\", \"top up\", any subscription wording, or any auto-calculation wording.\n- Price line must be bold; flexibility line must appear in a secondary (less prominent) color; the button uses the primary brand color.",
+      "files": [
+        "frontend/src/components/asistenku/LandingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-33"
       ],
       "confidence": "high"
     }

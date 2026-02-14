@@ -1,7 +1,7 @@
 {
   "frontend/src/App.tsx": "Minimal TanStack Router entry with single RouterProvider, root route using Outlet for children, all page routes (landing, client, partner, internal), and a NotFound fallback component for unmatched paths.",
   "frontend/src/main.tsx": "Application entry point that mounts the app with React Query provider only (no Internet Identity provider).",
-  "frontend/src/components/asistenku/LandingPage.tsx": "Main landing page component that composes all sections (Header, Hero, Layanan, JoinTeam, Penutup, Footer) in the specified order.",
+  "frontend/src/components/asistenku/LandingPage.tsx": "Main landing page component that implements Hero, Cara Kerja, Ketepatan, Unit Layanan, and Fase Layanan sections inline with exact copy-locked text, collapsible pricing cards with smooth animations, and continues to render Header, JoinTeamSection, Penutup, and Footer components.",
   "frontend/src/components/asistenku/Header.tsx": "Static header component with responsive logo display, white background with subtle shadow, and three navigation buttons (Masuk, Mulai, Partner) that navigate or scroll as specified.",
   "frontend/src/components/asistenku/Hero.tsx": "Hero section with centered image, exact copy text, scroll-to-layanan button, and WhatsApp link.",
   "frontend/src/components/asistenku/LayananSection.tsx": "Layanan section with 4 accordion cards in responsive grid, prices hidden in collapsed state, smooth expand/collapse animations.",
